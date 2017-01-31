@@ -88,16 +88,16 @@ public class Player implements Serializable{
     }
     public void reAdjust(){
         if(movement == "up"){
-            position.y -= 1f;
+            position.y -= 2f;
         }
         else if(movement == "down"){
-            position.y += 1f;
+            position.y += 2f;
         }
         else if(movement == "left"){
-            position.x += 1f;
+            position.x += 2f;
         }
         else if(movement == "right"){
-            position.x -= 1f;
+            position.x -= 2f;
         }
 
     }
