@@ -14,21 +14,19 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-/**
- * Created by Chao on 31/01/2017.
- */
 
 public class MainMenu implements Screen{
 
     Stage stage;
     Label label;
-    Label.LabelStyle style;
+    public static Label.LabelStyle style;
     BitmapFont font;
 
     TextureAtlas buttonAtlas;
-    TextButton.TextButtonStyle buttonStyle;
-    TextButton button;
+    public static TextButton.TextButtonStyle buttonStyle;
+    TextButton button, tableButton;
     Skin skin;
 
     SpriteBatch batch;
@@ -42,7 +40,7 @@ public class MainMenu implements Screen{
     public void show() {
 
         //stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-        stage = new Stage();
+        stage = new Stage(new ScreenViewport());
         font = new BitmapFont(Gdx.files.internal("android/assets/font.fnt"),false);
         style = new Label.LabelStyle(font, Color.BLACK);
 
@@ -72,7 +70,25 @@ public class MainMenu implements Screen{
         button.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.clear();
                 game.setScreen(new PlayScreen(game));
+                return true;
+            }
+        });
+
+        tableButton = new TextButton("Tables", buttonStyle);
+        tableButton.setWidth(Gdx.graphics.getWidth() / 3 );
+        tableButton.setHeight(Gdx.graphics.getHeight() / 6);
+        tableButton.setPosition((Gdx.graphics.getWidth() / 2 ) - button.getWidth() / 2 , (Gdx.graphics.getHeight() / 4 ) - (2* button.getHeight() / 2));
+
+        stage.addActor(tableButton);
+        //Gdx.input.setInputProcessor(stage);
+
+        tableButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.clear();
+                game.setScreen(new TableScreen(game));
                 return true;
             }
         });

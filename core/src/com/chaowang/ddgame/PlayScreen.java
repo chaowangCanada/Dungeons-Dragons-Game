@@ -32,6 +32,8 @@ public class PlayScreen implements Screen{
     private Iterator<Enemy> enemyIterator;
 
     private Game game;
+    private ArrayList<Tile> tiles;
+    Iterator<Tile> tileIterator;
 
     public PlayScreen(Game game){
         this.game = game;
@@ -72,6 +74,20 @@ public class PlayScreen implements Screen{
         }
         enemy = new Enemy(new Vector2(50, 50), player);
         enemies.add(enemy);
+
+        tiles = new ArrayList<Tile>();
+
+        for(int i = 0; i < 10; i++){
+            for (int j = 0 ; j < 10; j++){
+                int R = (int) ((Math.random() * (2 - 0) + 0 ));
+                if ( R == 0) {
+                    tiles.add(new Tile(new Texture(Gdx.files.internal("android/assets/grass.png")), i*50, j*50, 50, 50));
+                }
+                if ( R == 1) {
+                    tiles.add(new Tile(new Texture(Gdx.files.internal("android/assets/dirt.png")), i*50, j*50, 50, 50));
+                }
+            }
+        }
     }
 
     @Override
@@ -89,6 +105,13 @@ public class PlayScreen implements Screen{
 
 
         batch.begin();
+//
+//        tileIterator = tiles.iterator();
+//        while (tileIterator.hasNext()){
+//            Tile cur = tileIterator.next();
+//            cur.render(batch);
+//        }
+
         batch.draw(player.getCurrentFrame(),player.getPosition().x, player.getPosition().y );
         //batch.draw(player.getTexture(), player.getPosition().x, player.getPosition().y);  // if player contains texture (not serializable)
         //tree.draw(batch);  //draw 1 tree
