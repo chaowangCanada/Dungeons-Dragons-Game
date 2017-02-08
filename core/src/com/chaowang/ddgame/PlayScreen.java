@@ -181,7 +181,7 @@ public class PlayScreen implements Screen{
             }
         }
 
-        player.update();
+
 
         for (int i = 0; i< bounds.size(); i++){
             if (bounds.get(i).overlaps(player.getBounds())){
@@ -190,14 +190,13 @@ public class PlayScreen implements Screen{
         }
 
         MapProperties prop = map.getProperties();
-        Rectangle mapBounds = new Rectangle(0, 0, prop.get("width", Integer.class), prop.get("height", Integer.class));
+        Rectangle mapBounds = new Rectangle(0, 0, prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class), prop.get("height", Integer.class) * prop.get("tileheight", Integer.class));
 
-        System.out.println(mapBounds.getWidth() + ", " +mapBounds.getHeight());
-        System.out.println(player.getPosition().x + ", " +player.getPosition().y);
-
-        if (mapBounds.overlaps(player.getBounds())){
+        if (!mapBounds.contains(player.getBounds())){
             player.reAdjust();
         }
+        
+        player.update();
 //
 //        // These values likely need to be scaled according to your world coordinates.
 //// The left boundary of the map (x)

@@ -26,7 +26,7 @@ public class MainMenu implements Screen{
 
     TextureAtlas buttonAtlas;
     public static TextButton.TextButtonStyle buttonStyle;
-    TextButton button, tableButton;
+    TextButton button, tableButton, mapButton;
     Skin skin;
 
     SpriteBatch batch;
@@ -85,6 +85,23 @@ public class MainMenu implements Screen{
         //Gdx.input.setInputProcessor(stage);
 
         tableButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.clear();
+                game.setScreen(new TableScreen(game));
+                return true;
+            }
+        });
+        
+        mapButton = new TextButton("Map Editor", buttonStyle);
+        mapButton.setWidth(Gdx.graphics.getWidth() / 3 );
+        mapButton.setHeight(Gdx.graphics.getHeight() / 6);
+        mapButton.setPosition((Gdx.graphics.getWidth() / 2 ) - button.getWidth() / 2 , (Gdx.graphics.getHeight() / 4 ) + (2* button.getHeight() / 2));
+
+        stage.addActor(mapButton);
+        //Gdx.input.setInputProcessor(stage);
+
+        mapButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();

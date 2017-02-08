@@ -65,7 +65,7 @@ public class Player implements Serializable{
             stateTime = 0;
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.W )){
+        if(Gdx.input.isKeyPressed(Input.Keys.W ) ){
             position.y += 2f;
             movement = "up";
             currentFrame = (TextureRegion)animation.getKeyFrame(12 + stateTime);
