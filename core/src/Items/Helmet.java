@@ -18,6 +18,23 @@ public class Helmet {
 		this.ability.setIntelligence(intelligence);
 		this.ability.setWisdom(wisdom);
 		this.armor.setArmor(defens);
-
 	}
+
+	public Defense getArmor() {
+		return armor;
+	}
+
+	public void setArmor(Defense armor) {
+		this.armor = armor;
+	}
+
+	public Abilities getAbility() {
+		return ability;
+	}
+
+	public void setAbility(Abilities ability) {
+		this.ability = ability;
+	}
+	
+	
 }
