@@ -26,7 +26,7 @@ public class MainMenu implements Screen{
 
     TextureAtlas buttonAtlas;
     public static TextButton.TextButtonStyle buttonStyle;
-    TextButton button, tableButton, mapButton;
+    TextButton button, characterButton, mapButton, itemButton, campaignButton;
     Skin skin;
 
     SpriteBatch batch;
@@ -60,9 +60,9 @@ public class MainMenu implements Screen{
         buttonStyle.font = font;
 
         button = new TextButton("PLAY", buttonStyle);
-        button.setWidth(Gdx.graphics.getWidth() / 3 );
-        button.setHeight(Gdx.graphics.getHeight() / 6);
-        button.setPosition((Gdx.graphics.getWidth() / 2 ) - button.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) - button.getHeight() / 2);
+        button.setWidth(Gdx.graphics.getWidth() / 6 );
+        button.setHeight(Gdx.graphics.getHeight() / 9);
+        button.setPosition((Gdx.graphics.getWidth() / 2 ) - button.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) + (2* button.getHeight()));
 
         stage.addActor(button);
         Gdx.input.setInputProcessor(stage);
@@ -76,15 +76,32 @@ public class MainMenu implements Screen{
             }
         });
 
-        tableButton = new TextButton("Tables", buttonStyle);
-        tableButton.setWidth(Gdx.graphics.getWidth() / 3 );
-        tableButton.setHeight(Gdx.graphics.getHeight() / 6);
-        tableButton.setPosition((Gdx.graphics.getWidth() / 2 ) - button.getWidth() / 2 , (Gdx.graphics.getHeight() / 4 ) - (2* button.getHeight() / 2));
+        characterButton = new TextButton("Character Editor", buttonStyle);
+        characterButton.setWidth(Gdx.graphics.getWidth() / 3 );
+        characterButton.setHeight(Gdx.graphics.getHeight() / 9);
+        characterButton.setPosition((Gdx.graphics.getWidth() / 2 ) - characterButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) + characterButton.getHeight() / 2);
 
-        stage.addActor(tableButton);
+        stage.addActor(characterButton);
         //Gdx.input.setInputProcessor(stage);
 
-        tableButton.addListener(new InputListener(){
+        characterButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.clear();
+                game.setScreen(new ChatacterScreen(game));
+                return true;
+            }
+        });
+        
+        itemButton = new TextButton("Item Editor", buttonStyle);
+        itemButton.setWidth(Gdx.graphics.getWidth() / 3 );
+        itemButton.setHeight(Gdx.graphics.getHeight() / 9);
+        itemButton.setPosition((Gdx.graphics.getWidth() / 2 ) - itemButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) -  itemButton.getHeight());
+
+        stage.addActor(itemButton);
+        //Gdx.input.setInputProcessor(stage);
+
+        itemButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
@@ -95,13 +112,30 @@ public class MainMenu implements Screen{
         
         mapButton = new TextButton("Map Editor", buttonStyle);
         mapButton.setWidth(Gdx.graphics.getWidth() / 3 );
-        mapButton.setHeight(Gdx.graphics.getHeight() / 6);
-        mapButton.setPosition((Gdx.graphics.getWidth() / 2 ) - button.getWidth() / 2 , (Gdx.graphics.getHeight() / 4 ) + (2* button.getHeight() / 2));
+        mapButton.setHeight(Gdx.graphics.getHeight() / 9);
+        mapButton.setPosition((Gdx.graphics.getWidth() / 2 ) - mapButton.getWidth() / 2 , (Gdx.graphics.getHeight() /3 ) - mapButton.getHeight());
 
         stage.addActor(mapButton);
         //Gdx.input.setInputProcessor(stage);
 
         mapButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.clear();
+                game.setScreen(new TableScreen(game));
+                return true;
+            }
+        });
+        
+        campaignButton = new TextButton("Campaign Editor", buttonStyle);
+        campaignButton.setWidth(Gdx.graphics.getWidth() / 3 );
+        campaignButton.setHeight(Gdx.graphics.getHeight() / 9);
+        campaignButton.setPosition((Gdx.graphics.getWidth() / 2 ) - campaignButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 6 ) - campaignButton.getHeight());
+
+        stage.addActor(campaignButton);
+        //Gdx.input.setInputProcessor(stage);
+
+        campaignButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
