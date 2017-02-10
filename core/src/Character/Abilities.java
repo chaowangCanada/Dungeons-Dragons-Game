@@ -1,11 +1,44 @@
 package Character;
 
+import Items.EnchantedAbility;
+
 public class Abilities  {
 	
-	public static enum AbilityType { STRENGTH, DEXTERITY, CONSTITUTION, WISDOM, INTELLIGENCE, CHARISMA };
+	public enum AbilityType {
+		STRENGTH, DEXTERITY, CONSTITUTION, WISDOM, INTELLIGENCE, CHARISMA;
+
+//		STRENGTH(0), DEXTERITY(1), CONSTITUTION(2), WISDOM(3), INTELLIGENCE(4), CHARISMA(5);
+//		int index;
+//
+//		private AbilityType(int value) {
+//			this.index = value;
+//		}
+//
+//		public int getIndex() {
+//			return index;
+//		}
+//
+//		public AbilityType getAbility (int index) {
+//			switch (index) {
+//				case 0:
+//					return STRENGTH;
+//				case 1:
+//					return DEXTERITY;
+//				case 2:
+//					return CONSTITUTION;
+//				case 3:
+//					return WISDOM;
+//				case 4:
+//					return INTELLIGENCE;
+//				case 5:
+//					return CHARISMA;
+//			}
+//			return WISDOM;
+//		}
+
+	};
 	
 	private int strength, dexterity, constitution, wisdom, intelligence, charisma;
-	
 
 	public Abilities (int defaultValue){
 		strength = defaultValue;

@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,6 +27,8 @@ public class MainMenu implements Screen{
     BitmapFont font;
 
     TextureAtlas buttonAtlas;
+    private Texture backgroundTexture;
+    private Sprite backgroundSprite;
     public static TextButton.TextButtonStyle buttonStyle;
     TextButton button, characterButton, mapButton, itemButton, campaignButton;
     Skin skin;
@@ -44,19 +48,23 @@ public class MainMenu implements Screen{
         font = new BitmapFont(Gdx.files.internal("android/assets/font.fnt"),false);
         style = new Label.LabelStyle(font, Color.BLACK);
 
-        label = new Label("Dongeons & Dragon game ", style);
-        label.setPosition((Gdx.graphics.getWidth() / 2) - (label.getWidth() / 2), Gdx.graphics.getHeight()- 30);
+        backgroundTexture =  new Texture(Gdx.files.internal("android/assets/dnd.png"));
+        backgroundSprite =new Sprite(backgroundTexture);
 
-        stage.addActor(label);
+        //label = new Label("Dongeons & Dragon game ", style);
+        //label.setPosition((Gdx.graphics.getWidth() / 2) - (label.getWidth() / 2), Gdx.graphics.getHeight()- 30);
+
+        //stage.addActor(label);
 
         skin  = new Skin();
         buttonAtlas = new TextureAtlas("android/assets/buttons/button.pack");
+
         skin.addRegions(buttonAtlas);
 
         buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.up = skin.getDrawable("button");
-        buttonStyle.over = skin.getDrawable("buttonpressed");
-        buttonStyle.down = skin.getDrawable("buttonpressed");
+        buttonStyle.up = skin.getDrawable("buttonOff");
+        buttonStyle.over = skin.getDrawable("buttonOn");
+        buttonStyle.down = skin.getDrawable("buttonOn");
         buttonStyle.font = font;
 
         button = new TextButton("PLAY", buttonStyle);
@@ -88,7 +96,7 @@ public class MainMenu implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
-                game.setScreen(new ChatacterScreen(game));
+                game.setScreen(new CharacterScreen(game));
                 return true;
             }
         });
@@ -155,6 +163,11 @@ public class MainMenu implements Screen{
         stage.act();
 
         batch.begin();
+
+        stage.getBatch().begin();
+        stage.getBatch().draw(backgroundTexture, 0, 0,Gdx.graphics.getWidth() , Gdx.graphics.getHeight());
+        stage.getBatch().end();
+
         stage.draw();
         batch.end();
     }

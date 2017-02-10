@@ -1,7 +1,9 @@
 package Classes;
 
 public class Class {
-	public static enum ClassType {FIGHTER};
-	
-	
+	public enum ClassType {FIGHTER}
+
+	public int getHPModifier() {
+		return 5;
+	}
 }

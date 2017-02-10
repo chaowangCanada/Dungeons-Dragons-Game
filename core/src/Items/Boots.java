@@ -1,29 +1,28 @@
 package Items;
 
 import Character.Abilities;
-import Character.Defense;
 
 public class Boots {
-	private Defense armor;
+	private int armor;
 	private Abilities ability;
 	
 	
 	public Boots(){
-		armor = new Defense();
+		armor = 1;
 		ability = new Abilities();
 	}
 	
 	public Boots(int dexterity , int defens){
 		this();
 		this.ability.setDexterity(dexterity);
-		this.armor.setArmor(defens);
+		this.armor = (defens);
 	}
 
-	public Defense getArmor() {
+	public int getArmor() {
 		return armor;
 	}
 
-	public void setArmor(Defense armor) {
+	public void setArmor(int armor) {
 		this.armor = armor;
 	}
 

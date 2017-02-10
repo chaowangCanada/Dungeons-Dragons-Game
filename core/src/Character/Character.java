@@ -7,7 +7,7 @@ import Races.Race;
 import Races.Race.RaceType;
 
 public class Character {
-	public static enum Gender { MALE, FEMALE };
+	public enum Gender { MALE, FEMALE };
 
 	private Gender gender;
 	private ClassType classType;
@@ -19,7 +19,7 @@ public class Character {
 	private int attackBonus;
 	private int damageBonus;
 	private int hitPoints;
-	private Defense defense;
+	private int armorClass;
 	
 	private Armor armor;
 	private Belt belt;
@@ -47,10 +47,12 @@ public class Character {
 
 	public Character(String name, ClassType classType, RaceType raceType, int level) {
 		this.setName(name);
-		this.setDefense(new Defense());
 		this.classType = classType;
 		this.raceType  = raceType;
 		this.hitPoints = 10;
+		this.attackBonus =10;
+		this.damageBonus =10;
+		this.armorClass = 10;
 		this.abilities = new Abilities(10);
 		this.level = level;
 		
@@ -147,12 +149,12 @@ public class Character {
 		this.hitPoints = hitPoints;
 	}
 
-	public Defense getDefense() {
-		return defense;
+	public int getArmorClass() {
+		return armorClass;
 	}
 
-	public void setDefense(Defense defense) {
-		this.defense = defense;
+	public void setArmorClass(int defense) {
+		this.armorClass = defense;
 	}
 
 	public int getAttackBonus() {

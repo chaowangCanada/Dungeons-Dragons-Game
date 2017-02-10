@@ -1,25 +1,23 @@
 package Items;
 
-import Character.Defense;
-
 public class Shield {
 
-	private Defense armor;	
+	private int armor;
 	
 	public Shield(){
-		armor = new Defense();
+		armor = 1;
 	}
 	
 	public Shield(int defens){
 		this();
-		this.armor.setArmor(defens);
+		this.armor = (defens);
 	}
 
-	public Defense getArmor() {
+	public int getArmor() {
 		return armor;
 	}
 
-	public void setArmor(Defense armor) {
+	public void setArmor(int armor) {
 		this.armor = armor;
 	}
 	

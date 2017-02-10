@@ -3,17 +3,17 @@ button.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-button
+buttonOff
   rotate: false
   xy: 1, 1
-  size: 241, 86
-  orig: 241, 86
+  size: 300, 200
+  orig: 300, 200
   offset: 0, 0
   index: -1
-buttonpressed
+buttonOn
   rotate: false
-  xy: 244, 1
-  size: 241, 86
-  orig: 241, 86
+  xy: 303, 1
+  size: 300, 200
+  orig: 300, 200
   offset: 0, 0
   index: -1

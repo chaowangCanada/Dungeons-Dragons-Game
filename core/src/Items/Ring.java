@@ -1,15 +1,14 @@
 package Items;
 
 import Character.Abilities;
-import Character.Defense;
 
 public class Ring {
-	private Defense armor;
+	private int armor;
 	private Abilities ability;
 	
 	
 	public Ring(){
-		armor = new Defense();
+		armor = 1;
 		ability = new Abilities();
 	}
 	
@@ -19,14 +18,14 @@ public class Ring {
 		this.ability.setConstitution(constitution);
 		this.ability.setWisdom(wisdom);
 		this.ability.setCharisma(charisma);
-		this.armor.setArmor(defens);
+		this.armor=(defens);
 	}
 
-	public Defense getArmor() {
+	public int getArmor() {
 		return armor;
 	}
 
-	public void setArmor(Defense armor) {
+	public void setArmor(int armor) {
 		this.armor = armor;
 	}
 
