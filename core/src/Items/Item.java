@@ -26,11 +26,13 @@ public class Item {
     private int level;
     private String name;
     private ItemType itemType;
+    private EnchantedAbility enchantedAbility;
 
-    public Item(ItemType type ,int level, String name) {
+    public Item(ItemType type ,int level, String name, EnchantedAbility enchantedAbility) {
         this.itemType = type;
         this.level = level;
         this.name = name;
+        this.enchantedAbility = enchantedAbility;
     }
 
     public void setLevel(int level) {
@@ -56,4 +58,14 @@ public class Item {
     public String getName() {
         return name;
     }
+
+	public EnchantedAbility getEnchantedAbility() {
+		return enchantedAbility;
+	}
+
+	public void setEnchantedAbility(EnchantedAbility enchantedAbility) {
+		this.enchantedAbility = enchantedAbility;
+	}
+    
+    
 }

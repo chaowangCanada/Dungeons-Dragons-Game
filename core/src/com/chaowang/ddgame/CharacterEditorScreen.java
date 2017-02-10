@@ -8,19 +8,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class CharacterScreen implements Screen{
+public class CharacterEditorScreen implements Screen{
     Game game;
 
     Stage stage;
     SpriteBatch batch;
 
-    public CharacterScreen(Game game) {
+    public CharacterEditorScreen(Game game) {
         this.game = game;
     }
     
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
         stage = new Stage(new ScreenViewport());
 
         batch = new SpriteBatch();
