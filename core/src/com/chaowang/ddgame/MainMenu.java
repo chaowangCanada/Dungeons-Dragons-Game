@@ -16,25 +16,29 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.io.IOException;
+
+import Items.ItemInventory;
 
 
 public class MainMenu implements Screen{
 
-    Stage stage;
-    Label label;
+    private Stage stage;
+
     public static Label.LabelStyle style;
     public static BitmapFont font;
-
+    public static ItemInventory itemInventory;
     TextureAtlas buttonAtlas;
     private Texture backgroundTexture;
-    private Sprite backgroundSprite;
     public static TextButton.TextButtonStyle buttonStyle;
-    TextButton playButton, characterButton, mapButton, itemButton, campaignButton;
-    Skin skin;
+    private TextButton playButton, characterButton, mapButton, itemButton, campaignButton;
+    public static Skin skin;
 
-    SpriteBatch batch;
-    Game game;
+    private SpriteBatch batch;
+    private Game game;
 
     public MainMenu(Game game) {
         this.game = game;
@@ -45,26 +49,26 @@ public class MainMenu implements Screen{
 
         //stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage = new Stage(new ScreenViewport());
-        font = new BitmapFont(Gdx.files.internal("android/assets/font.fnt"),false);
-        style = new Label.LabelStyle(font, Color.BLACK);
+        Gdx.input.setInputProcessor(stage);
+
+        font = new BitmapFont(Gdx.files.internal("android/assets/Style/default.fnt"),false);
+        style = new Label.LabelStyle(font, Color.WHITE);
+        itemInventory = new ItemInventory();
+        try {
+            itemInventory.readFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         backgroundTexture =  new Texture(Gdx.files.internal("android/assets/dnd.png"));
-        backgroundSprite =new Sprite(backgroundTexture);
 
-        //label = new Label("Dongeons & Dragon game ", style);
-        //label.setPosition((Gdx.graphics.getWidth() / 2) - (label.getWidth() / 2), Gdx.graphics.getHeight()- 30);
-
-        //stage.addActor(label);
-
-        skin  = new Skin();
+        skin = new Skin(Gdx.files.internal("android/assets/Style/uiskin.json"));
         buttonAtlas = new TextureAtlas("android/assets/buttons/button.pack");
-
         skin.addRegions(buttonAtlas);
-
         buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.up = skin.getDrawable("buttonOff");
-        buttonStyle.over = skin.getDrawable("buttonOn");
-        buttonStyle.down = skin.getDrawable("buttonOn");
+        buttonStyle.up = skin.getDrawable("buttonOn");
+        buttonStyle.over = skin.getDrawable("buttonOff");
+        buttonStyle.down = skin.getDrawable("buttonOff");
         buttonStyle.font = font;
 
         playButton = new TextButton("PLAY", buttonStyle);
@@ -73,7 +77,6 @@ public class MainMenu implements Screen{
         playButton.setPosition((Gdx.graphics.getWidth()  * 3 / 4  ) - playButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) + (2* playButton.getHeight()));
 
         stage.addActor(playButton);
-        Gdx.input.setInputProcessor(stage);
 
         playButton.addListener(new InputListener(){
             @Override
@@ -90,7 +93,6 @@ public class MainMenu implements Screen{
         characterButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - characterButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) + characterButton.getHeight() / 2);
 
         stage.addActor(characterButton);
-        //Gdx.input.setInputProcessor(stage);
 
         characterButton.addListener(new InputListener(){
             @Override
@@ -107,7 +109,6 @@ public class MainMenu implements Screen{
         itemButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - itemButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 2 ) -  itemButton.getHeight());
 
         stage.addActor(itemButton);
-        //Gdx.input.setInputProcessor(stage);
 
         itemButton.addListener(new InputListener(){
             @Override
@@ -124,7 +125,6 @@ public class MainMenu implements Screen{
         mapButton.setPosition((Gdx.graphics.getWidth() * 3 / 4  ) - mapButton.getWidth() / 2 , (Gdx.graphics.getHeight() /3 ) - mapButton.getHeight());
 
         stage.addActor(mapButton);
-        //Gdx.input.setInputProcessor(stage);
 
         mapButton.addListener(new InputListener(){
             @Override
@@ -141,7 +141,6 @@ public class MainMenu implements Screen{
         campaignButton.setPosition((Gdx.graphics.getWidth() * 3 / 4 ) - campaignButton.getWidth() / 2 , (Gdx.graphics.getHeight() / 6 ) - campaignButton.getHeight());
 
         stage.addActor(campaignButton);
-        //Gdx.input.setInputProcessor(stage);
 
         campaignButton.addListener(new InputListener(){
             @Override
