@@ -16,7 +16,7 @@ public class Item {
         WEAPON(6, new EnchantedAbility[]{EnchantedAbility.ATTACKBONUS,EnchantedAbility.DAMAGEBONUS});
 
         EnchantedAbility[] abilityArr;
-        int index;
+        private int index;
 
         private ItemType(int index, EnchantedAbility[] abilityArr) {
             this.index = index;
@@ -81,7 +81,7 @@ public class Item {
 //        }
         switch (type){
             case ARMOR:
-                texture = new Texture(Gdx.files.internal("android/assets/items/armor.png"));
+                texture = new Texture(Gdx.files.internal("android/assets/races/Undead.gif"));
                 break;
             case BELT:
                 texture = new Texture(Gdx.files.internal("android/assets/items/belt.jpg"));

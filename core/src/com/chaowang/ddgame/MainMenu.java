@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,13 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.io.IOException;
 
 import Items.ItemInventory;
-
+import Character.CharacterInventory;
 
 public class MainMenu implements Screen{
 
@@ -31,6 +29,7 @@ public class MainMenu implements Screen{
     public static Label.LabelStyle style;
     public static BitmapFont font;
     public static ItemInventory itemInventory;
+    public static CharacterInventory characterInventory;
     TextureAtlas buttonAtlas;
     private Texture backgroundTexture;
     public static TextButton.TextButtonStyle buttonStyle;
@@ -56,6 +55,13 @@ public class MainMenu implements Screen{
         itemInventory = new ItemInventory();
         try {
             itemInventory.readFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        characterInventory = new CharacterInventory();
+        try {
+            characterInventory.readFile();
         } catch (IOException e) {
             e.printStackTrace();
         }

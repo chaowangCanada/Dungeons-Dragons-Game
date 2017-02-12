@@ -13,10 +13,6 @@ import java.util.ArrayList;
 public class ItemInventory {
     private ArrayList<Item> itemPack;
 
-    public ItemInventory(ArrayList<Item> itemPack) {
-        this.itemPack = itemPack;
-    }
-
     public ItemInventory() {
         this.itemPack = new ArrayList<Item>();
     }

@@ -1,15 +1,16 @@
 package Character;
 
-import Classes.Class;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+import java.util.HashMap;
+
 import Classes.Class.ClassType;
 import Items.*;
-import Races.Race;
 import Races.Race.RaceType;
 
 public class Character {
-	public enum Gender { MALE, FEMALE };
 
-	private Gender gender;
 	private ClassType classType;
 	private RaceType raceType;
 	private String name;
@@ -20,34 +21,22 @@ public class Character {
 	private int damageBonus;
 	private int hitPoints;
 	private int armorClass;
-	
-	private Armor armor;
-	private Belt belt;
-	private Boots boots;
-	private Helmet helmet;
-	private Ring ring;
-	private Shield shield;
-	private Weapon weapon;
+    private Texture texture;
 
-	public Abilities getAbilities() {
-		return abilities;
-	}
+    private HashMap<Item.ItemType,Item> equipment;
 
-	public void setAbilities(Abilities abilities) {
-		this.abilities = abilities;
-	}
 
 	public Character(){
-		this("");
+		this("Default");
 	};
 	
 	public Character(String name) {
-		this(name, ClassType.FIGHTER, RaceType.HUMAN, 1);
+		this(name, 1, RaceType.HUMAN);
 	}
 
-	public Character(String name, ClassType classType, RaceType raceType, int level) {
+	public Character(String name, int level, RaceType raceType) {
 		this.setName(name);
-		this.classType = classType;
+		this.classType = ClassType.FIGHTER;
 		this.raceType  = raceType;
 		this.hitPoints = 10;
 		this.attackBonus =10;
@@ -55,17 +44,58 @@ public class Character {
 		this.armorClass = 10;
 		this.abilities = new Abilities(10);
 		this.level = level;
-		
-		this.armor = new Armor();
-		this.belt = new Belt();
-		this.boots = new Boots();
-		this.helmet = new Helmet();
-		this.ring = new Ring();
-		this.shield = new Shield();
-		this.weapon = new Weapon();
+        this.equipment = new HashMap<Item.ItemType, Item>();
+        updateTexture(raceType);
+    }
 
-	}
-	
+    private void updateTexture(RaceType raceType) {
+        switch (raceType){
+            case HUMAN:
+                texture = new Texture(Gdx.files.internal("android/assets/races/human.jpg"));
+                break;
+            case DWARF:
+                texture = new Texture(Gdx.files.internal("android/assets/races/dwarf.jpg"));
+                break;
+            case ELF:
+                texture = new Texture(Gdx.files.internal("android/assets/races/elf.jpg"));
+                break;
+            case ORC:
+                texture = new Texture(Gdx.files.internal("android/assets/races/orc.jpg"));
+                break;
+            case TAUREN:
+                texture = new Texture(Gdx.files.internal("android/assets/races/tauren.jpg"));
+                break;
+            case TROLL:
+                texture = new Texture(Gdx.files.internal("android/assets/races/troll.jpg"));
+                break;
+            case UNDEAD:
+                texture = new Texture(Gdx.files.internal("android/assets/races/undead.jpg"));
+                break;
+        }
+    }
+
+    public boolean nextRace(){
+        if(raceType.getIndex() >= 6 ){
+            return false;
+        }
+        else{
+            this.raceType = raceType.getRaceType(this.raceType.getIndex()+1);
+            updateTexture(this.raceType);
+            return true;
+        }
+    }
+
+    public boolean previousRace(){
+        if(raceType.getIndex() <=0 ){
+            return false;
+        }
+        else{
+            this.raceType = raceType.getRaceType(this.getRaceType().getIndex() -1);
+            updateTexture(this.raceType);
+            return true;
+        }
+    }
+
 	public String getName() {
 		return name;
 	}
@@ -74,74 +104,31 @@ public class Character {
 		this.name = name;
 	}
 
-	public Gender getGender() {
-		return gender;
-	}
+    public Abilities getAbilities() {
+        return abilities;
+    }
 
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
+    public void setAbilities(Abilities abilities) {
+        this.abilities = abilities;
+    }
 
-	// equipment
-	public Belt getBelt() {
-		return belt;
-	}
+    public Texture getTexture() {
+        return texture;
+    }
 
-	public void setBelt(Belt belt) {
-		this.belt = belt;
-	}
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
 
-	public Boots getBoots() {
-		return boots;
-	}
+    public HashMap<Item.ItemType, Item> getEquipment() {
+        return equipment;
+    }
 
-	public void setBoots(Boots boots) {
-		this.boots = boots;
-	}
+    public void setEquipment(HashMap<Item.ItemType, Item> equipment) {
+        this.equipment = equipment;
+    }
 
-	public Helmet getHelmet() {
-		return helmet;
-	}
-
-	public void setHelmet(Helmet helmet) {
-		this.helmet = helmet;
-	}
-
-	public Ring getRing() {
-		return ring;
-	}
-
-	public void setRing(Ring ring) {
-		this.ring = ring;
-	}
-
-	public Shield getShield() {
-		return shield;
-	}
-
-	public void setShield(Shield shield) {
-		this.shield = shield;
-	}
-
-	public Weapon getWeapon() {
-		return weapon;
-	}
-
-	public void setWeapon(Weapon weapon) {
-		this.weapon = weapon;
-	}
-	
-	public void setArmor(Armor armor) {
-		this.armor = armor;
-	}
-	
-	public Armor getArmor() {
-		return armor;
-	}
-
-	// calculation
-	
-	public int getHitPoints() {
+    public int getHitPoints() {
 		return hitPoints;
 	}
 
@@ -177,8 +164,6 @@ public class Character {
 		this.level = level;
 	}
 
-
-
 	public int getLevel() {
 		return level;
 	}
@@ -205,11 +190,16 @@ public class Character {
 		
 		return hitPoints + constitutionModifier;
 	}
-	
-	public boolean isDead() {
+
+    public  String toString(){
+        return "Name: "+this.name + "| Race Type: " + this.raceType.toString()+ "| Level: "+this.level+"| Ability: "+this.abilities.toString();
+    }
+
+
+    public boolean isDead() {
 		return getHP() <= 0;
-	}		
-	
+	}
+
 
 	public int getStrength() {
 		return abilities.getStrength();

@@ -34,7 +34,7 @@ public class ItemEditorScreen implements Screen {
     private Game game;
     private Stage stage;
     private SpriteBatch batch;
-	private Texture backgroundTexture, itemTexture;
+	private Texture backgroundTexture;
 	private Table editorTable, inventoryTable;
 	private TextButton itemLeftButton, itemRightButton, abilityLeftButton, abilityRightButton, itemSaveButton, mainPageButton;
 	private Item item;
@@ -44,7 +44,6 @@ public class ItemEditorScreen implements Screen {
 
 
 	private ImageButton[] inventoryMatrix;
-	private int inventoryIndex = 0;
 
 	public ItemEditorScreen(Game game) {
         this.game = game;

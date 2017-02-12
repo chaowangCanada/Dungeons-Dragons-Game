@@ -1,0 +1,2 @@
+Default|1|TAUREN
+Default|1|HUMAN
