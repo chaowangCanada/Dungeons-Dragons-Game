@@ -3,7 +3,10 @@ package Character;
 import Items.EnchantedAbility;
 
 public class Abilities  {
-	
+	public static final int ABILITYSIZE = 6;
+
+	private int[] abilityArr;
+
 	public enum AbilityType {
 		//STRENGTH, DEXTERITY, CONSTITUTION, WISDOM, INTELLIGENCE, CHARISMA;
 
@@ -38,93 +41,37 @@ public class Abilities  {
 
 	};
 	
-	private int strength, dexterity, constitution, wisdom, intelligence, charisma;
 
 	public Abilities (int defaultValue){
-		strength = defaultValue;
-		dexterity = defaultValue; 
-		constitution = defaultValue;
-		wisdom = defaultValue;
-		intelligence = defaultValue;
-		charisma = defaultValue;
+		abilityArr = new int[ABILITYSIZE];
+		for (Integer i : abilityArr){
+			abilityArr[i] = defaultValue;
+		}
+	}
+
+	public Abilities (int[] arr){
+		abilityArr = arr;
 	}
 	
 	public Abilities (){
-		strength = 0;
-		dexterity = 0; 
-		constitution = 0;
-		wisdom = 0;
-		intelligence = 0;
-		charisma = 0;
+		this(0);
 	}
 
 	public String toString(){
-		return 	Integer.toString(this.strength) + " | " +Integer.toString(this.dexterity) + " | " + Integer.toString(this.constitution) + " | "
-				+ Integer.toString(this.wisdom) + " | " +Integer.toString(this.intelligence) + " | " +Integer.toString(this.charisma);
+		return 	Integer.toString(this.abilityArr[0]) + " | " +Integer.toString(this.abilityArr[1]) + " | " + Integer.toString(this.abilityArr[2]) + " | "
+				+ Integer.toString(this.abilityArr[3]) + " | " +Integer.toString(this.abilityArr[4]) + " | " +Integer.toString(this.abilityArr[5]);
 	}
 
 
-	public int getStrength() {
-		return strength;
+	public int[] getAbilityArr() {
+		return abilityArr;
 	}
 
-
-	public void setStrength(int strength) {
-		this.strength = strength;
+	public void setAbilityArr(int[] abilityArr) {
+		this.abilityArr = abilityArr;
 	}
 
-
-	public int getDexterity() {
-		return dexterity;
+	public void setAbility(int index, int value) {
+		this.abilityArr[index] = value;
 	}
-
-
-	public void setDexterity(int dexterity) {
-		this.dexterity = dexterity;
-	}
-
-
-	public int getConstitution() {
-		return constitution;
-	}
-
-
-	public void setConstitution(int constitution) {
-		this.constitution = constitution;
-	}
-
-
-	public int getWisdom() {
-		return wisdom;
-	}
-
-
-	public void setWisdom(int wisdom) {
-		this.wisdom = wisdom;
-	}
-
-
-	public int getIntelligence() {
-		return intelligence;
-	}
-
-
-	public void setIntelligence(int intelligence) {
-		this.intelligence = intelligence;
-	}
-
-
-	public int getCharisma() {
-		return charisma;
-	}
-
-
-	public void setCharisma(int charisma) {
-		this.charisma = charisma;
-	}
-	
-	public int getModifier(int value) {
-		return value/2;
-}
-	
 }

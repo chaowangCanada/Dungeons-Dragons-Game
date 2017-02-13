@@ -23,13 +23,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import Character.Character;
-import Items.Item;
+import util.AbilityModifier;
+import util.Dice;
 
 
 public class CharacterEditorScreen implements Screen {
-	final int INVENTORYROW = 5, INVENTORYCOLUMN = 5;
-	final int cellWidth = Gdx.graphics.getHeight() * 3 / 5 / INVENTORYROW;
-	final int cellHeight = Gdx.graphics.getHeight() * 3 / 5 / INVENTORYCOLUMN;
+
 	private Game game;
 	private Stage stage;
 	private SpriteBatch batch;
@@ -39,15 +38,21 @@ public class CharacterEditorScreen implements Screen {
 	private Character character;
 	private Label classLabel, raceLabel;
 	private Label hitpointLabel, attackBonusLabel, damageBonusLaber, armorClassLabel,
-			strengthLabel, dexterityLabel, constitutionLabel, wisdomLabel, intellegenceLabel, chrismaLabel, characterInfoLabel;
+			strengthLabel, dexterityLabel, constitutionLabel, wisdomLabel, intellegenceLabel, charismaLabel, characterInfoLabel;
 	private TextField nameText, levelText;
-	private Image characterImage, diceImage;
+	private Image characterImage;
 
 
 	private ImageButton[] inventoryMatrix;
+	private ImageButton diceButton ,backpackButton;
 
 	public CharacterEditorScreen(Game game) {
 		this.game = game;
+	}
+
+	public CharacterEditorScreen(Game game, Character character) {
+		this.game = game;
+		this.character = character;
 	}
 
 	@Override
@@ -71,10 +76,16 @@ public class CharacterEditorScreen implements Screen {
 		});
 		stage.addActor(mainPageButton);
 
-
-		character = new Character();
+		if(character == null){
+			character = new Character();
+		}
 		nameText = new TextField(character.getName(), MainMenu.skin);
-		levelText = new TextField("Integer 1-9", MainMenu.skin);
+		if(character.getLevel() > 0){
+			levelText = new TextField(Integer.toString(character.getLevel()), MainMenu.skin);
+		}
+		else{
+			levelText = new TextField("Integer 1-9", MainMenu.skin);
+		}
 		raceLabel = new Label(character.getRaceType().toString(), MainMenu.style);
 		characterImage = new Image(character.getTexture());
 
@@ -101,20 +112,19 @@ public class CharacterEditorScreen implements Screen {
 		});
 
 		classLabel = new Label("Fighter",MainMenu.style);
-		strengthLabel = new Label("",MainMenu.style);
-		dexterityLabel = new Label("",MainMenu.style);
-		constitutionLabel = new Label("",MainMenu.style);
-		wisdomLabel = new Label("",MainMenu.style);
-		intellegenceLabel = new Label("",MainMenu.style);
-		chrismaLabel = new Label("",MainMenu.style);
-		hitpointLabel = new Label("",MainMenu.style);
-		attackBonusLabel  = new Label("",MainMenu.style);
-		damageBonusLaber  = new Label("",MainMenu.style);
-		armorClassLabel  = new Label("",MainMenu.style);
+		strengthLabel = new Label(Integer.toString(character.getStrength()),MainMenu.style);
+		dexterityLabel = new Label(Integer.toString(character.getDexterity()),MainMenu.style);
+		constitutionLabel = new Label(Integer.toString(character.getConstitution()),MainMenu.style);
+		wisdomLabel = new Label(Integer.toString(character.getWisdom()),MainMenu.style);
+		intellegenceLabel = new Label(Integer.toString(character.getIntelligence()),MainMenu.style);
+		charismaLabel = new Label(Integer.toString(character.getCharisma()),MainMenu.style);
+		hitpointLabel = new Label(Integer.toString(character.getHitPoints()),MainMenu.style);
+		attackBonusLabel  = new Label(Integer.toString(character.getAttackBonus()),MainMenu.style);
+		damageBonusLaber  = new Label(Integer.toString(character.getDamageBonus()),MainMenu.style);
+		armorClassLabel  = new Label(Integer.toString(character.getArmorClass()),MainMenu.style);
 
 
 		editorTable = new Table();
-		editorTable.setDebug(true);
 
 		editorTable.setSize(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() );
 		editorTable.setPosition(Gdx.graphics.getWidth() / 10, 2);
@@ -129,9 +139,9 @@ public class CharacterEditorScreen implements Screen {
 		editorTable.add(new Label("Level", MainMenu.style));
 		editorTable.add(levelText);
 		editorTable.row();
-		editorTable.add(raceLeftButton).size(50, 30);
+		editorTable.add(raceLeftButton).size(50, 50);
 		editorTable.add(raceLabel).center();
-		editorTable.add(raceRightButton).size(50, 30).expandX();
+		editorTable.add(raceRightButton).size(50, 50).expandX();
 		editorTable.row();
 		editorTable.add(new Label("class", MainMenu.style));
 		editorTable.add(classLabel);
@@ -152,10 +162,13 @@ public class CharacterEditorScreen implements Screen {
 		editorTable.add(intellegenceLabel);
 		editorTable.row();
 		editorTable.add(new Label("charisma", MainMenu.style));
-		editorTable.add(chrismaLabel);
+		editorTable.add(charismaLabel);
 		editorTable.row();
 		editorTable.add(new Label("hit point", MainMenu.style));
 		editorTable.add(hitpointLabel);
+		editorTable.row();
+		editorTable.add(new Label("armor class", MainMenu.style));
+		editorTable.add(armorClassLabel);
 		editorTable.row();
 		editorTable.add(new Label("attach bonus", MainMenu.style));
 		editorTable.add(attackBonusLabel);
@@ -163,20 +176,18 @@ public class CharacterEditorScreen implements Screen {
 		editorTable.add(new Label("damage bonus", MainMenu.style));
 		editorTable.add(damageBonusLaber);
 		editorTable.row();
-		editorTable.add(new Label("armor class", MainMenu.style));
-		editorTable.add(armorClassLabel);
-		editorTable.row();
 
 		stage.addActor(editorTable);
 
 		characterSaveButton = new TextButton("SAVE", MainMenu.buttonStyle);
 		characterSaveButton.setWidth(Gdx.graphics.getWidth() / 9);
 		characterSaveButton.setHeight(Gdx.graphics.getHeight() / 9);
-		characterSaveButton.setPosition((Gdx.graphics.getWidth() * 1 / 2) , (Gdx.graphics.getHeight() / 20));
+		characterSaveButton.setPosition((Gdx.graphics.getWidth() * 1 / 2) + 50 , (Gdx.graphics.getHeight() / 20));
 		characterSaveButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$")) {
+				if (levelText.getText().matches("^[1-9]$") && ! wisdomLabel.getText().equals("0")) {
+					System.out.println(wisdomLabel.getText());
 					character.setLevel(Integer.parseInt(levelText.getText()));
 					character.setName(nameText.getText());
 					MainMenu.characterInventory.addToInventory(character);
@@ -192,19 +203,74 @@ public class CharacterEditorScreen implements Screen {
 		});
 		stage.addActor(characterSaveButton);
 
+		backpackButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/backpack.png")))));
+		backpackButton.setWidth(Gdx.graphics.getWidth() / 15);
+		backpackButton.setHeight(Gdx.graphics.getHeight() / 15);
+		backpackButton.setPosition((Gdx.graphics.getWidth() * 1 / 2)  - 75 , (Gdx.graphics.getHeight() / 5));
+		backpackButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (levelText.getText().matches("^[1-9]$")) {
+					character.setLevel(Integer.parseInt(levelText.getText()));
+					character.setName(nameText.getText());
+					game.setScreen(new BackpackEditorScreen(game, character));
+				}
+				return true;
+			}
+		});
+		stage.addActor(backpackButton);
+
+
+		diceButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/dice.png")))));
+		diceButton.setWidth(Gdx.graphics.getWidth() / 15);
+		diceButton.setHeight(Gdx.graphics.getHeight() / 15);
+		diceButton.setPosition((Gdx.graphics.getWidth() * 1 / 2)  - 75 , (Gdx.graphics.getHeight() / 12));
+		diceButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (levelText.getText().matches("^[1-9]$")) {
+					int multiplier = Integer.parseInt(levelText.getText()) / 2;
+					character.setStrength(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
+					character.setDexterity(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
+					character.setConstitution(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
+					character.setWisdom(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
+					character.setIntelligence(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
+					character.setCharisma(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
+
+					strengthLabel.setText(Integer.toString(character.getStrength()));
+					dexterityLabel.setText(Integer.toString(character.getDexterity()));
+					constitutionLabel.setText(Integer.toString(character.getConstitution()));
+					wisdomLabel.setText(Integer.toString(character.getWisdom()));
+					intellegenceLabel.setText(Integer.toString(character.getIntelligence()));
+					charismaLabel.setText(Integer.toString(character.getCharisma()));
+
+					character.setHitPoints(AbilityModifier.hitPointModifier(character.getConstitution(),character.getLevel()));
+					character.setArmorClass(AbilityModifier.armorClassModifier(character.getDexterity()));
+					character.setAttackBonus(AbilityModifier.attachBonusModifier(character.getStrength(),character.getDexterity(), character.getLevel()));
+					character.setDamageBonus(AbilityModifier.damageBonusModifier(character.getStrength()));
+
+					hitpointLabel.setText(Integer.toString(character.getHitPoints()));
+					armorClassLabel.setText(Integer.toString(character.getArmorClass()));
+					attackBonusLabel.setText(Integer.toString(character.getAttackBonus()));
+					damageBonusLaber.setText(Integer.toString(character.getDamageBonus()));
+				}
+				return true;
+			}
+		});
+		stage.addActor(diceButton);
+
 		// Right hand side
 		characterInfoLabel = new Label("", MainMenu.style);
 		characterInfoLabel.setPosition((Gdx.graphics.getWidth() * 3 / 7), (Gdx.graphics.getHeight() * 1 / 5));
 		stage.addActor(characterInfoLabel);
 
 		inventoryTable = new Table();
-		inventoryTable.setDebug(true);
 
 		inventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 4 / 5);
 		inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 20, Gdx.graphics.getHeight() * 1 / 6);
 		//inventoryTable.setBounds(Gdx.graphics.getWidth() / 48, 0, Gdx.graphics.getWidth() - ( Gdx.graphics.getWidth() / 24), Gdx.graphics.getHeight());
 
-		inventoryMatrix = new ImageButton[INVENTORYROW * INVENTORYCOLUMN];
+		inventoryMatrix = new ImageButton[PublicParameter.characterInventoryRow * PublicParameter.characterInventoryColumn];
 		buildInventoryMatrix();
 		addInventoryMatrixListener();
 
@@ -216,18 +282,29 @@ public class CharacterEditorScreen implements Screen {
 		characterImage.setDrawable(new SpriteDrawable(new Sprite(character.getTexture())));
 		levelText.setText(Integer.toString(character.getLevel()));
 		nameText.setText(character.getName());
+		strengthLabel.setText(Integer.toString(character.getStrength()));
+		dexterityLabel.setText(Integer.toString(character.getDexterity()));
+		constitutionLabel.setText(Integer.toString(character.getConstitution()));
+		wisdomLabel.setText(Integer.toString(character.getWisdom()));
+		intellegenceLabel.setText(Integer.toString(character.getIntelligence()));
+		charismaLabel.setText(Integer.toString(character.getCharisma()));
+		hitpointLabel.setText(Integer.toString(character.getHitPoints()));
+		armorClassLabel.setText(Integer.toString(character.getArmorClass()));
+		attackBonusLabel.setText(Integer.toString(character.getAttackBonus()));
+		damageBonusLaber.setText(Integer.toString(character.getDamageBonus()));
+
 	}
 
 	private void buildInventoryMatrix() {
-		for (int i = 0; i < INVENTORYROW; i++) {
-			for (int j = 0; j < INVENTORYCOLUMN; j++) {
-				if ((i * INVENTORYROW) + j < MainMenu.characterInventory.getChatacterPack().size() ) {
-					inventoryMatrix[(i * INVENTORYROW) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenu.characterInventory.getChatacterPack().get(i * INVENTORYROW + j).getTexture())));
+		for (int i = 0; i < PublicParameter.characterInventoryRow; i++) {
+			for (int j = 0; j < PublicParameter.characterInventoryColumn; j++) {
+				if ((i * PublicParameter.characterInventoryColumn) + j < MainMenu.characterInventory.getChatacterPack().size() ) {
+					inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenu.characterInventory.getChatacterPack().get(i * PublicParameter.characterInventoryColumn + j).getTexture())));
 				} else {
-					inventoryMatrix[(i * INVENTORYROW) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.jpg")))));
+					inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
 				}
-				ImageButton tempButton = inventoryMatrix[(i * INVENTORYROW) + j];
-				inventoryTable.add(tempButton).width(cellWidth).height(cellHeight).space(15);
+				ImageButton tempButton = inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j];
+				inventoryTable.add(tempButton).width(PublicParameter.characterCellWidth).height(PublicParameter.characterCellHeight).space(15);
 			}
 			inventoryTable.row();
 		}
@@ -242,6 +319,8 @@ public class CharacterEditorScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		stage.act();
 
+		batch.enableBlending();
+
 		batch.begin();
 
 		stage.getBatch().begin();
@@ -250,7 +329,6 @@ public class CharacterEditorScreen implements Screen {
 
 		stage.draw();
 
-		stage.setDebugAll(true);
 		batch.end();
 	}
 
@@ -295,7 +373,9 @@ public class CharacterEditorScreen implements Screen {
 						character = new Character(
 								MainMenu.characterInventory.getChatacterPack().get(0).getName(),
 								MainMenu.characterInventory.getChatacterPack().get(0).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(0).getRaceType());
+								MainMenu.characterInventory.getChatacterPack().get(0).getRaceType(),
+								MainMenu.characterInventory.getChatacterPack().get(0).getAllAttributes(),
+								MainMenu.characterInventory.getChatacterPack().get(0).getBackpack());
 						initialEditorItem();
 						MainMenu.characterInventory.getChatacterPack().remove(0);
 						MainMenu.characterInventory.saveToFile();
@@ -323,7 +403,10 @@ public class CharacterEditorScreen implements Screen {
 						character = new Character(
 								MainMenu.characterInventory.getChatacterPack().get(1).getName(),
 								MainMenu.characterInventory.getChatacterPack().get(1).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(1).getRaceType());
+								MainMenu.characterInventory.getChatacterPack().get(1).getRaceType(),
+								MainMenu.characterInventory.getChatacterPack().get(1).getAllAttributes(),
+								MainMenu.characterInventory.getChatacterPack().get(1).getBackpack());
+
 						initialEditorItem();
 						MainMenu.characterInventory.getChatacterPack().remove(1);
 						MainMenu.characterInventory.saveToFile();
@@ -351,7 +434,9 @@ public class CharacterEditorScreen implements Screen {
 						character = new Character(
 								MainMenu.characterInventory.getChatacterPack().get(2).getName(),
 								MainMenu.characterInventory.getChatacterPack().get(2).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(2).getRaceType());
+								MainMenu.characterInventory.getChatacterPack().get(2).getRaceType(),
+								MainMenu.characterInventory.getChatacterPack().get(2).getAllAttributes(),
+								MainMenu.characterInventory.getChatacterPack().get(2).getBackpack());
 						initialEditorItem();
 						MainMenu.characterInventory.getChatacterPack().remove(2);
 						MainMenu.characterInventory.saveToFile();
@@ -379,7 +464,9 @@ public class CharacterEditorScreen implements Screen {
 						character = new Character(
 								MainMenu.characterInventory.getChatacterPack().get(3).getName(),
 								MainMenu.characterInventory.getChatacterPack().get(3).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(3).getRaceType());
+								MainMenu.characterInventory.getChatacterPack().get(3).getRaceType(),
+								MainMenu.characterInventory.getChatacterPack().get(3).getAllAttributes(),
+								MainMenu.characterInventory.getChatacterPack().get(3).getBackpack());
 						initialEditorItem();
 						MainMenu.characterInventory.getChatacterPack().remove(3);
 						MainMenu.characterInventory.saveToFile();
@@ -407,7 +494,9 @@ public class CharacterEditorScreen implements Screen {
 						character = new Character(
 								MainMenu.characterInventory.getChatacterPack().get(4).getName(),
 								MainMenu.characterInventory.getChatacterPack().get(4).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(4).getRaceType());
+								MainMenu.characterInventory.getChatacterPack().get(4).getRaceType(),
+								MainMenu.characterInventory.getChatacterPack().get(4).getAllAttributes(),
+								MainMenu.characterInventory.getChatacterPack().get(4).getBackpack());
 						initialEditorItem();
 						MainMenu.characterInventory.getChatacterPack().remove(4);
 						MainMenu.characterInventory.saveToFile();
@@ -435,7 +524,9 @@ public class CharacterEditorScreen implements Screen {
 						character = new Character(
 								MainMenu.characterInventory.getChatacterPack().get(5).getName(),
 								MainMenu.characterInventory.getChatacterPack().get(5).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(5).getRaceType());
+								MainMenu.characterInventory.getChatacterPack().get(5).getRaceType(),
+								MainMenu.characterInventory.getChatacterPack().get(5).getAllAttributes(),
+								MainMenu.characterInventory.getChatacterPack().get(5).getBackpack());
 						initialEditorItem();
 						MainMenu.characterInventory.getChatacterPack().remove(5);
 						MainMenu.characterInventory.saveToFile();

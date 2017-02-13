@@ -28,9 +28,6 @@ import Items.ItemInventory;
 import sun.applet.Main;
 
 public class ItemEditorScreen implements Screen {
-	final int INVENTORYROW = 7, INVENTORYCOLUMN = 7;
-	final int cellWidth = Gdx.graphics.getHeight() * 5 / 8 / INVENTORYROW;
-	final int cellHeight = Gdx.graphics.getHeight() * 5 / 8 / INVENTORYCOLUMN;
     private Game game;
     private Stage stage;
     private SpriteBatch batch;
@@ -122,13 +119,12 @@ public class ItemEditorScreen implements Screen {
 		});
 
 		editorTable = new Table();
-		editorTable.setDebug(true);
-
 		editorTable.setSize(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() / 2);
 		editorTable.setPosition(Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() * 1 / 4);
 		//editorTable.setBounds(Gdx.graphics.getWidth() / 48, 0, Gdx.graphics.getWidth() - ( Gdx.graphics.getWidth() / 24), Gdx.graphics.getHeight());
 
-		editorTable.add(itemImage).maxSize(180, 180).center();
+		editorTable.add(new Label("", MainMenu.style)).width(80);
+		editorTable.add(itemImage).maxSize(200, 200).center();
 		editorTable.row();
 		editorTable.add(new Label("Name", MainMenu.style));
 		editorTable.add(nameText);
@@ -175,13 +171,12 @@ public class ItemEditorScreen implements Screen {
 		stage.addActor(itemInfoLabel);
 
 		inventoryTable = new Table();
-		inventoryTable.setDebug(true);
 
 		inventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 4 / 5);
-		inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 20, Gdx.graphics.getHeight() * 1 / 6);
+		inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 20, Gdx.graphics.getHeight() * 1 / 10);
 		//inventoryTable.setBounds(Gdx.graphics.getWidth() / 48, 0, Gdx.graphics.getWidth() - ( Gdx.graphics.getWidth() / 24), Gdx.graphics.getHeight());
 
-		inventoryMatrix = new ImageButton[INVENTORYROW * INVENTORYCOLUMN];
+		inventoryMatrix = new ImageButton[PublicParameter.itemInventoryRow * PublicParameter.itemInventoryColumn];
 		buildInventoryMatrix();
 		addInventoryMatrixListener();
 
@@ -197,15 +192,15 @@ public class ItemEditorScreen implements Screen {
 	}
 
 	private void buildInventoryMatrix() {
-		for (int i = 0; i < INVENTORYROW; i++) {
-			for (int j = 0; j < INVENTORYCOLUMN; j++) {
-				if ((i * INVENTORYROW) + j < MainMenu.itemInventory.getItemPack().size() ) {
-					inventoryMatrix[(i * INVENTORYROW) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenu.itemInventory.getItemPack().get(i * INVENTORYROW + j).getTexture())));
+		for (int i = 0; i < PublicParameter.itemInventoryRow; i++) {
+			for (int j = 0; j < PublicParameter.itemInventoryColumn; j++) {
+				if ((i * PublicParameter.itemInventoryColumn) + j < MainMenu.itemInventory.getItemPack().size() ) {
+					inventoryMatrix[(i * PublicParameter.itemInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenu.itemInventory.getItemPack().get(i * PublicParameter.itemInventoryColumn + j).getTexture())));
 				} else {
-					inventoryMatrix[(i * INVENTORYROW) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.jpg")))));
+					inventoryMatrix[(i * PublicParameter.itemInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
 				}
-				ImageButton tempButton = inventoryMatrix[(i * INVENTORYROW) + j];
-				inventoryTable.add(tempButton).width(cellWidth).height(cellHeight).space(15);
+				ImageButton tempButton = inventoryMatrix[(i * PublicParameter.itemInventoryColumn) + j];
+				inventoryTable.add(tempButton).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight).space(15);
 			}
 			inventoryTable.row();
 		}
@@ -220,6 +215,7 @@ public class ItemEditorScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         stage.act();
 
+		batch.enableBlending();
 		batch.begin();
 
 		stage.getBatch().begin();
@@ -227,7 +223,6 @@ public class ItemEditorScreen implements Screen {
 		stage.getBatch().end();
 
         stage.draw();
-
 		stage.setDebugAll(true);
         batch.end();
 	}

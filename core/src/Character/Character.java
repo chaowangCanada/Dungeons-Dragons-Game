@@ -3,6 +3,8 @@ package Character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import Classes.Class.ClassType;
@@ -10,6 +12,7 @@ import Items.*;
 import Races.Race.RaceType;
 
 public class Character {
+    public static final int FIGHTATTRUBUTESIZE = 4;
 
 	private ClassType classType;
 	private RaceType raceType;
@@ -24,52 +27,75 @@ public class Character {
     private Texture texture;
 
     private HashMap<Item.ItemType,Item> equipment;
-
+    private ArrayList<Item> backpack;
 
 	public Character(){
 		this("Default");
 	};
 	
 	public Character(String name) {
-		this(name, 1, RaceType.HUMAN);
+		this(name, 0, RaceType.HUMAN);
 	}
 
 	public Character(String name, int level, RaceType raceType) {
 		this.setName(name);
 		this.classType = ClassType.FIGHTER;
 		this.raceType  = raceType;
-		this.hitPoints = 10;
-		this.attackBonus =10;
-		this.damageBonus =10;
-		this.armorClass = 10;
-		this.abilities = new Abilities(10);
+		this.hitPoints = 0;
+		this.attackBonus = 0;
+		this.damageBonus = 0;
+		this.armorClass = 0;
+		this.abilities = new Abilities(0);
 		this.level = level;
+        this.backpack = new ArrayList<Item>();
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
     }
 
-    private void updateTexture(RaceType raceType) {
+    public Character(String name, int level, RaceType raceType, int[] abilityArr) {
+        this.setName(name);
+        this.classType = ClassType.FIGHTER;
+        this.raceType  = raceType;
+        this.level = level;
+        this.backpack = new ArrayList<Item>();
+        this.equipment = new HashMap<Item.ItemType, Item>();
+        updateTexture(raceType);
+        int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
+        System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
+        this.abilities = new Abilities(subAbilityArr);
+        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE]);
+        this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+1]);
+        this.setAttackBonus(abilityArr[Abilities.ABILITYSIZE+2]);
+        this.setDamageBonus(abilityArr[Abilities.ABILITYSIZE+3]);
+    }
+
+    public Character(String name, int level, RaceType raceType, int[] abilityArr, ArrayList<Item> backpack) {
+        this(name,level,raceType,abilityArr);
+        this.backpack = backpack;
+    }
+
+        private void updateTexture(RaceType raceType) {
         switch (raceType){
             case HUMAN:
                 texture = new Texture(Gdx.files.internal("android/assets/races/human.jpg"));
                 break;
             case DWARF:
-                texture = new Texture(Gdx.files.internal("android/assets/races/dwarf.jpg"));
+                texture = new Texture(Gdx.files.internal("android/assets/races/dwarf.png"));
                 break;
             case ELF:
-                texture = new Texture(Gdx.files.internal("android/assets/races/elf.jpg"));
+                texture = new Texture(Gdx.files.internal("android/assets/races/elf.png"));
                 break;
             case ORC:
-                texture = new Texture(Gdx.files.internal("android/assets/races/orc.jpg"));
+                texture = new Texture(Gdx.files.internal("android/assets/races/orc.png"));
                 break;
             case TAUREN:
-                texture = new Texture(Gdx.files.internal("android/assets/races/tauren.jpg"));
+                texture = new Texture(Gdx.files.internal("android/assets/races/tauren.png"));
                 break;
             case TROLL:
-                texture = new Texture(Gdx.files.internal("android/assets/races/troll.jpg"));
+                texture = new Texture(Gdx.files.internal("android/assets/races/troll.png"));
                 break;
             case UNDEAD:
-                texture = new Texture(Gdx.files.internal("android/assets/races/undead.jpg"));
+                texture = new Texture(Gdx.files.internal("android/assets/races/undead.png"));
                 break;
         }
     }
@@ -118,6 +144,14 @@ public class Character {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+    }
+
+    public ArrayList<Item> getBackpack() {
+        return backpack;
+    }
+
+    public void setBackpack(ArrayList<Item> backpack) {
+        this.backpack = backpack;
     }
 
     public HashMap<Item.ItemType, Item> getEquipment() {
@@ -178,17 +212,7 @@ public class Character {
 	}
 
 	public int getHP() {
-		
-		if(hitPoints == 0) {
-			return 0;
-		}
-		
-		int constitutionModifier = abilities.getModifier(abilities.getConstitution());		
-		if(hitPoints+ constitutionModifier < 1) {
-			return 1;
-		}
-		
-		return hitPoints + constitutionModifier;
+		return hitPoints ;
 	}
 
     public  String toString(){
@@ -200,44 +224,60 @@ public class Character {
 		return getHP() <= 0;
 	}
 
-
 	public int getStrength() {
-		return abilities.getStrength();
+        return abilities.getAbilityArr()[Abilities.AbilityType.STRENGTH.getIndex()];
 	}
 
 	public int getDexterity() {
-		return abilities.getDexterity();
+		return abilities.getAbilityArr()[Abilities.AbilityType.DEXTERITY.getIndex()];
 	}
 
 	public int getConstitution() {
-		return abilities.getConstitution();
+        return abilities.getAbilityArr()[Abilities.AbilityType.CONSTITUTION.getIndex()];
 	}
 
 	public int getWisdom() {
-		return abilities.getWisdom();
-	}
+        return abilities.getAbilityArr()[Abilities.AbilityType.WISDOM.getIndex()];
+
+    }
 
 	public int getIntelligence() {
-		return abilities.getIntelligence();
-	}
+        return abilities.getAbilityArr()[Abilities.AbilityType.INTELLIGENCE.getIndex()];
+
+    }
 
 	public int getCharisma() {
-		return abilities.getCharisma();
-	}
+        return abilities.getAbilityArr()[Abilities.AbilityType.CHARISMA.getIndex()];
+
+    }
 
 	public void setStrength(int strength) {
-		abilities.setStrength(strength);		
+        abilities.setAbility(Abilities.AbilityType.STRENGTH.getIndex(), strength);
 	}
 
 	public void setDexterity(int dexterity) {
-		abilities.setDexterity(dexterity);
+		abilities.setAbility(Abilities.AbilityType.DEXTERITY.getIndex(), dexterity);
 	}
 
 	public void setConstitution(int constitution) {
-		abilities.setConstitution(constitution);
-	}
+        abilities.setAbility(Abilities.AbilityType.CONSTITUTION.getIndex(), constitution);
+    }
 
-	public ClassType getClassType() {
+    public void setWisdom(int wisdom) {
+        abilities.setAbility(Abilities.AbilityType.WISDOM.getIndex(), wisdom);
+    }
+
+    public void setIntelligence(int intelligence) {
+        abilities.setAbility(Abilities.AbilityType.INTELLIGENCE.getIndex(), intelligence);
+
+    }
+
+    public void setCharisma(int charisma){
+        abilities.setAbility(Abilities.AbilityType.CHARISMA.getIndex(), charisma);
+    }
+
+
+    public ClassType getClassType() {
 		return classType;
 	}
 
@@ -245,9 +285,21 @@ public class Character {
 		this.classType = classType;
 	}
 
+	public int[] getAllAttributes(){
+        int[] attributeArr = new int[Abilities.ABILITYSIZE + Character.FIGHTATTRUBUTESIZE];
+        System.arraycopy(abilities.getAbilityArr(), 0 , attributeArr , 0, Abilities.ABILITYSIZE);
+        attributeArr[Abilities.ABILITYSIZE ] = hitPoints;
+        attributeArr[Abilities.ABILITYSIZE + 1] = armorClass;
+        attributeArr[Abilities.ABILITYSIZE + 2] = attackBonus;
+        attributeArr[Abilities.ABILITYSIZE + 3] = damageBonus;
+        return attributeArr;
+    }
+
+
 	public RaceType getRaceType() {
 		return raceType;
 	}
+
 
 	public void setRaceType(RaceType raceType) {
 		this.raceType = raceType;

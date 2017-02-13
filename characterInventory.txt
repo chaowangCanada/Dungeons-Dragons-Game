@@ -1,2 +1,1 @@
-Default|1|TAUREN
-Default|1|HUMAN
+Default|2|DWARF|5,11,17,10,12,12,54,5,4,2

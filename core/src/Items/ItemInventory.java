@@ -35,7 +35,6 @@ public class ItemInventory {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line = reader.readLine();
         while( line != null && line !="" ) {
-            System.out.println(line);
             String[] itemArray = line.split("\\|",-1);
             addToInventory(new Item(Item.ItemType.valueOf(itemArray[0]), itemArray[1], Integer.parseInt(itemArray[2]), EnchantedAbility.valueOf(itemArray[3])));
             line = reader.readLine();
@@ -47,7 +46,6 @@ public class ItemInventory {
         FileHandle file = Gdx.files.local("itemInventory.txt");
         file.write(false);
         for (Item i : this.itemPack){
-            System.out.println(i);
             String str  = i.getItemType().toString() +"|" + i.getName() +"|" +  i.getLevel() +"|" + i.getEnchantedAbility().toString() + "\r\n";
             file.writeString(str,true);
         }
