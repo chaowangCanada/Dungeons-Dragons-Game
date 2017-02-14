@@ -72,7 +72,7 @@ class BackpackEditorScreen implements Screen {
         inventoryTable = new Table();
 
         inventoryTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 4 / 5);
-        inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 20, Gdx.graphics.getHeight() * 1 / 8);
+        inventoryTable.setPosition(Gdx.graphics.getWidth() / 2 - 10 , Gdx.graphics.getHeight() * 1 / 8);
 
         inventoryMatrix = new ImageButton[PublicParameter.itemInventoryRow * PublicParameter.itemInventoryColumn ];
         buildInventoryMatrix();
@@ -82,9 +82,9 @@ class BackpackEditorScreen implements Screen {
 
 
         backpackTable = new Table();
-
-        backpackTable.setSize(Gdx.graphics.getWidth() / 3 + 20, Gdx.graphics.getHeight() * 1 / 2);
-        backpackTable.setPosition( Gdx.graphics.getWidth() / 20 , Gdx.graphics.getHeight() * 1 / 3);
+        backpackTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/backpackBackground.png")))));
+        backpackTable.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 1 / 3);
+        backpackTable.setPosition( 0 , Gdx.graphics.getHeight() * 1 / 3);
 
         backpackMatrix = new ImageButton[PublicParameter.itemBackpackRow * PublicParameter.itemBackpackColumn];
         buildBackpackMatrix();
@@ -143,7 +143,7 @@ class BackpackEditorScreen implements Screen {
 
         stage.draw();
 
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
         batch.end();
     }
 

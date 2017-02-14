@@ -223,7 +223,7 @@ public class ItemEditorScreen implements Screen {
 		stage.getBatch().end();
 
         stage.draw();
-		stage.setDebugAll(true);
+		//stage.setDebugAll(true);
         batch.end();
 	}
 

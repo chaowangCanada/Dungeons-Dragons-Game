@@ -34,7 +34,7 @@ public class CharacterEditorScreen implements Screen {
 	private SpriteBatch batch;
 	private Texture backgroundTexture;
 	private Table editorTable, inventoryTable;
-	private TextButton raceLeftButton, raceRightButton, characterSaveButton, mainPageButton, equipmentPageButton;
+	private TextButton raceLeftButton, raceRightButton, characterSaveButton, mainPageButton;
 	private Character character;
 	private Label classLabel, raceLabel;
 	private Label hitpointLabel, attackBonusLabel, damageBonusLaber, armorClassLabel,
@@ -44,7 +44,7 @@ public class CharacterEditorScreen implements Screen {
 
 
 	private ImageButton[] inventoryMatrix;
-	private ImageButton diceButton ,backpackButton;
+	private ImageButton diceButton ,backpackButton,equipmentPageButton;
 
 	public CharacterEditorScreen(Game game) {
 		this.game = game;
@@ -202,6 +202,25 @@ public class CharacterEditorScreen implements Screen {
 			}
 		});
 		stage.addActor(characterSaveButton);
+
+
+
+		equipmentPageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/equipment.png")))));
+		equipmentPageButton.setWidth(Gdx.graphics.getWidth() / 15);
+		equipmentPageButton.setHeight(Gdx.graphics.getHeight() / 15);
+		equipmentPageButton.setPosition((Gdx.graphics.getWidth() * 1 / 2)  - 75 , (Gdx.graphics.getHeight() / 3));
+		equipmentPageButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (levelText.getText().matches("^[1-9]$")) {
+					character.setLevel(Integer.parseInt(levelText.getText()));
+					character.setName(nameText.getText());
+					game.setScreen(new EquipmentEditorScreen(game, character));
+				}
+				return true;
+			}
+		});
+		stage.addActor(equipmentPageButton);
 
 		backpackButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/backpack.png")))));
 		backpackButton.setWidth(Gdx.graphics.getWidth() / 15);
