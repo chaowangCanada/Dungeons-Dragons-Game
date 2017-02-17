@@ -261,174 +261,32 @@ public class ItemEditorScreen implements Screen {
 
 	private void addInventoryMatrixListener() {
 		for (int i = 0; i < MainMenu.itemInventory.getItemPack().size() ; i++){
-			if(i == 0 && i < MainMenu.itemInventory.getItemPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						item = new Item(MainMenu.itemInventory.getItemPack().get(0).getItemType(),
-								MainMenu.itemInventory.getItemPack().get(0).getName(),
-								MainMenu.itemInventory.getItemPack().get(0).getLevel(),
-								MainMenu.itemInventory.getItemPack().get(0).getEnchantedAbility());
-						initialEditorItem();
-						MainMenu.itemInventory.getItemPack().remove(0);
-						MainMenu.itemInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
+				inventoryMatrix[i].addListener(new ClickListener(i) {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					item = new Item(MainMenu.itemInventory.getItemPack().get(button).getItemType(),
+							MainMenu.itemInventory.getItemPack().get(button).getName(),
+							MainMenu.itemInventory.getItemPack().get(button).getLevel(),
+							MainMenu.itemInventory.getItemPack().get(button).getEnchantedAbility());
+					initialEditorItem();
+					MainMenu.itemInventory.getItemPack().remove(button);
+					MainMenu.itemInventory.saveToFile();
+					inventoryTable.clearChildren();
+					buildInventoryMatrix();
+					addInventoryMatrixListener();
+					return true;
+				}
 
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						itemInfoLabel.setText(MainMenu.itemInventory.getItemPack().get(0).toString());
-					}
+				@Override
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					itemInfoLabel.setText(MainMenu.itemInventory.getItemPack().get(getButton()).toString());
+				}
 
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						itemInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 1 && i < MainMenu.itemInventory.getItemPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						item = new Item(MainMenu.itemInventory.getItemPack().get(1).getItemType(),
-								MainMenu.itemInventory.getItemPack().get(1).getName(),
-								MainMenu.itemInventory.getItemPack().get(1).getLevel(),
-								MainMenu.itemInventory.getItemPack().get(1).getEnchantedAbility());
-						initialEditorItem();
-						MainMenu.itemInventory.getItemPack().remove(1);
-						MainMenu.itemInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						itemInfoLabel.setText(MainMenu.itemInventory.getItemPack().get(1).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						itemInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 2 && i < MainMenu.itemInventory.getItemPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						item = new Item(MainMenu.itemInventory.getItemPack().get(2).getItemType(),
-								MainMenu.itemInventory.getItemPack().get(2).getName(),
-								MainMenu.itemInventory.getItemPack().get(2).getLevel(),
-								MainMenu.itemInventory.getItemPack().get(2).getEnchantedAbility());
-						initialEditorItem();
-						MainMenu.itemInventory.getItemPack().remove(2);
-						MainMenu.itemInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						itemInfoLabel.setText(MainMenu.itemInventory.getItemPack().get(2).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						itemInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 3 && i < MainMenu.itemInventory.getItemPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						item = new Item(MainMenu.itemInventory.getItemPack().get(3).getItemType(),
-								MainMenu.itemInventory.getItemPack().get(3).getName(),
-								MainMenu.itemInventory.getItemPack().get(3).getLevel(),
-								MainMenu.itemInventory.getItemPack().get(3).getEnchantedAbility());
-						initialEditorItem();
-						MainMenu.itemInventory.getItemPack().remove(3);
-						MainMenu.itemInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						itemInfoLabel.setText(MainMenu.itemInventory.getItemPack().get(3).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						itemInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 4 && i < MainMenu.itemInventory.getItemPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						item = new Item(MainMenu.itemInventory.getItemPack().get(4).getItemType(),
-								MainMenu.itemInventory.getItemPack().get(4).getName(),
-								MainMenu.itemInventory.getItemPack().get(4).getLevel(),
-								MainMenu.itemInventory.getItemPack().get(4).getEnchantedAbility());
-						initialEditorItem();
-						MainMenu.itemInventory.getItemPack().remove(4);
-						MainMenu.itemInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						itemInfoLabel.setText(MainMenu.itemInventory.getItemPack().get(4).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						itemInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 5 && i < MainMenu.itemInventory.getItemPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						item = new Item(MainMenu.itemInventory.getItemPack().get(5).getItemType(),
-								MainMenu.itemInventory.getItemPack().get(5).getName(),
-								MainMenu.itemInventory.getItemPack().get(5).getLevel(),
-								MainMenu.itemInventory.getItemPack().get(5).getEnchantedAbility());
-						initialEditorItem();
-						MainMenu.itemInventory.getItemPack().remove(5);
-						MainMenu.itemInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						itemInfoLabel.setText(MainMenu.itemInventory.getItemPack().get(5).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						itemInfoLabel.setText("");
-					}
-				});
-			}
+				@Override
+				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					itemInfoLabel.setText("");
+				}
+			});
 		}
 	}
 

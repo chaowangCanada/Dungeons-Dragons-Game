@@ -3,17 +3,18 @@ package Items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.chaowang.ddgame.PublicParameter;
 
 public class Item {
 
     public enum ItemType {
         HELMET(0, new EnchantedAbility[]{EnchantedAbility.INTELLIGENCE, EnchantedAbility.ARMORCLASS, EnchantedAbility.WISDOM}),
         ARMOR(1, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
-        SHIELD(2, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
-        RING(3, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS, EnchantedAbility.STRENGTH, EnchantedAbility.WISDOM, EnchantedAbility.CONSTITUTION, EnchantedAbility.CHARISMA}),
-        BELT(4, new EnchantedAbility[]{EnchantedAbility.CONSTITUTION,EnchantedAbility.STRENGTH}),
+        WEAPON(2, new EnchantedAbility[]{EnchantedAbility.ATTACKBONUS,EnchantedAbility.DAMAGEBONUS}),
+        BELT(3, new EnchantedAbility[]{EnchantedAbility.CONSTITUTION,EnchantedAbility.STRENGTH}),
+        SHIELD(4, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS}),
         BOOTS(5, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS,EnchantedAbility.DEXTERITY}),
-        WEAPON(6, new EnchantedAbility[]{EnchantedAbility.ATTACKBONUS,EnchantedAbility.DAMAGEBONUS});
+        RING(6, new EnchantedAbility[]{EnchantedAbility.ARMORCLASS, EnchantedAbility.STRENGTH, EnchantedAbility.WISDOM, EnchantedAbility.CONSTITUTION, EnchantedAbility.CHARISMA});
 
         EnchantedAbility[] abilityArr;
         private int index;
@@ -31,22 +32,22 @@ public class Item {
             return index;
         }
 
-        public ItemType getItemType(int index){
+        public static ItemType getItemType(int index){
             switch (index){
                 case 0:
                     return HELMET;
                 case 1:
                     return ARMOR;
                 case 2:
-                    return SHIELD;
+                    return WEAPON;
                 case 3:
-                    return RING;
-                case 4:
                     return BELT;
+                case 4:
+                    return SHIELD;
                 case 5:
                     return BOOTS;
                 case 6:
-                    return WEAPON;
+                    return RING;
             }
             return HELMET;
         }
@@ -188,6 +189,5 @@ public class Item {
             return true;
         }
     }
-    
-    
+
 }

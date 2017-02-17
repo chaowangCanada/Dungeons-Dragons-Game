@@ -84,7 +84,7 @@ public class CharacterEditorScreen implements Screen {
 			levelText = new TextField(Integer.toString(character.getLevel()), MainMenu.skin);
 		}
 		else{
-			levelText = new TextField("Integer 1-9", MainMenu.skin);
+			levelText = new TextField("0", MainMenu.skin);
 		}
 		raceLabel = new Label(character.getRaceType().toString(), MainMenu.style);
 		characterImage = new Image(character.getTexture());
@@ -138,6 +138,7 @@ public class CharacterEditorScreen implements Screen {
 		editorTable.row();
 		editorTable.add(new Label("Level", MainMenu.style));
 		editorTable.add(levelText);
+		editorTable.add(new Label("1-9", MainMenu.style));
 		editorTable.row();
 		editorTable.add(raceLeftButton).size(50, 50);
 		editorTable.add(raceLabel).center();
@@ -186,7 +187,7 @@ public class CharacterEditorScreen implements Screen {
 		characterSaveButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$") && ! wisdomLabel.getText().equals("0")) {
+				if (levelText.getText().matches("^[1-9]$") && Integer.parseInt(wisdomLabel.getText().toString())!=0 ) {
 					System.out.println(wisdomLabel.getText());
 					character.setLevel(Integer.parseInt(levelText.getText()));
 					character.setName(nameText.getText());
@@ -385,187 +386,34 @@ public class CharacterEditorScreen implements Screen {
 
 	private void addInventoryMatrixListener() {
 		for (int i = 0; i < MainMenu.characterInventory.getChatacterPack().size() ; i++){
-			if(i == 0 && i < MainMenu.characterInventory.getChatacterPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						character = new Character(
-								MainMenu.characterInventory.getChatacterPack().get(0).getName(),
-								MainMenu.characterInventory.getChatacterPack().get(0).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(0).getRaceType(),
-								MainMenu.characterInventory.getChatacterPack().get(0).getAllAttributes(),
-								MainMenu.characterInventory.getChatacterPack().get(0).getBackpack());
-						initialEditorItem();
-						MainMenu.characterInventory.getChatacterPack().remove(0);
-						MainMenu.characterInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
+			inventoryMatrix[i].addListener(new ClickListener(i) {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					character = new Character(
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getName(),
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getLevel(),
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getRaceType(),
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getAllAttributes(),
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getBackpack());
+					initialEditorItem();
+					MainMenu.characterInventory.getChatacterPack().remove(getButton());
+					MainMenu.characterInventory.saveToFile();
+					inventoryTable.clearChildren();
+					buildInventoryMatrix();
+					addInventoryMatrixListener();
+					return true;
+				}
 
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						characterInfoLabel.setText(MainMenu.characterInventory.getChatacterPack().get(0).toString());
-					}
+				@Override
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					characterInfoLabel.setText(MainMenu.characterInventory.getChatacterPack().get(getButton()).toString());
+				}
 
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						characterInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 1 && i <  MainMenu.characterInventory.getChatacterPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						character = new Character(
-								MainMenu.characterInventory.getChatacterPack().get(1).getName(),
-								MainMenu.characterInventory.getChatacterPack().get(1).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(1).getRaceType(),
-								MainMenu.characterInventory.getChatacterPack().get(1).getAllAttributes(),
-								MainMenu.characterInventory.getChatacterPack().get(1).getBackpack());
-
-						initialEditorItem();
-						MainMenu.characterInventory.getChatacterPack().remove(1);
-						MainMenu.characterInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						characterInfoLabel.setText(MainMenu.characterInventory.getChatacterPack().get(1).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						characterInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 2 && i <  MainMenu.characterInventory.getChatacterPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						character = new Character(
-								MainMenu.characterInventory.getChatacterPack().get(2).getName(),
-								MainMenu.characterInventory.getChatacterPack().get(2).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(2).getRaceType(),
-								MainMenu.characterInventory.getChatacterPack().get(2).getAllAttributes(),
-								MainMenu.characterInventory.getChatacterPack().get(2).getBackpack());
-						initialEditorItem();
-						MainMenu.characterInventory.getChatacterPack().remove(2);
-						MainMenu.characterInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						characterInfoLabel.setText(MainMenu.characterInventory.getChatacterPack().get(2).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						characterInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 3 && i <  MainMenu.characterInventory.getChatacterPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						character = new Character(
-								MainMenu.characterInventory.getChatacterPack().get(3).getName(),
-								MainMenu.characterInventory.getChatacterPack().get(3).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(3).getRaceType(),
-								MainMenu.characterInventory.getChatacterPack().get(3).getAllAttributes(),
-								MainMenu.characterInventory.getChatacterPack().get(3).getBackpack());
-						initialEditorItem();
-						MainMenu.characterInventory.getChatacterPack().remove(3);
-						MainMenu.characterInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						characterInfoLabel.setText(MainMenu.characterInventory.getChatacterPack().get(3).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						characterInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 4 && i <  MainMenu.characterInventory.getChatacterPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						character = new Character(
-								MainMenu.characterInventory.getChatacterPack().get(4).getName(),
-								MainMenu.characterInventory.getChatacterPack().get(4).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(4).getRaceType(),
-								MainMenu.characterInventory.getChatacterPack().get(4).getAllAttributes(),
-								MainMenu.characterInventory.getChatacterPack().get(4).getBackpack());
-						initialEditorItem();
-						MainMenu.characterInventory.getChatacterPack().remove(4);
-						MainMenu.characterInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						characterInfoLabel.setText(MainMenu.characterInventory.getChatacterPack().get(4).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						characterInfoLabel.setText("");
-					}
-				});
-			}
-			if(i == 5 && i <  MainMenu.characterInventory.getChatacterPack().size() ){
-				inventoryMatrix[i].addListener(new ClickListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						character = new Character(
-								MainMenu.characterInventory.getChatacterPack().get(5).getName(),
-								MainMenu.characterInventory.getChatacterPack().get(5).getLevel(),
-								MainMenu.characterInventory.getChatacterPack().get(5).getRaceType(),
-								MainMenu.characterInventory.getChatacterPack().get(5).getAllAttributes(),
-								MainMenu.characterInventory.getChatacterPack().get(5).getBackpack());
-						initialEditorItem();
-						MainMenu.characterInventory.getChatacterPack().remove(5);
-						MainMenu.characterInventory.saveToFile();
-						inventoryTable.clearChildren();
-						buildInventoryMatrix();
-						addInventoryMatrixListener();
-						return true;
-					}
-
-					@Override
-					public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-						characterInfoLabel.setText(MainMenu.characterInventory.getChatacterPack().get(5).toString());
-					}
-
-					@Override
-					public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-						characterInfoLabel.setText("");
-					}
-				});
-			}
+				@Override
+				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					characterInfoLabel.setText("");
+				}
+			});
 		}
 	}
 

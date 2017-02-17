@@ -21,9 +21,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Items.Item;
 import Character.Character;
-/**
- * Created by Chao on 13/02/2017.
- */
 
 public class EquipmentEditorScreen implements Screen{
 
@@ -86,10 +83,11 @@ public class EquipmentEditorScreen implements Screen{
 
         equipmentTable = new Table();
 
-        equipmentTable.setSize(Gdx.graphics.getWidth() / 4 , Gdx.graphics.getHeight() * 1 / 2);
+        equipmentTable.setSize(Gdx.graphics.getWidth() / 8 , Gdx.graphics.getHeight() * 1 / 3);
         equipmentTable.setPosition( Gdx.graphics.getWidth() / 20 , Gdx.graphics.getHeight() * 1 / 3);
+        equipmentTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/MaleHumanUnderwear.png")))));
 
-        equipmentMatrix = new ImageButton[7];
+        equipmentMatrix = new ImageButton[PublicParameter.itemTypeCount];
         buildEquipmentMatrix();
         addEquipmentMatrixListener();
 
@@ -116,7 +114,7 @@ public class EquipmentEditorScreen implements Screen{
 
     private void buildEquipmentMatrix() {
 
-        equipmentTable.add(new Label("", MainMenu.style)).width(80);
+        equipmentTable.add(new Label("", MainMenu.style));
         if(character.getEquipment().get(Item.ItemType.HELMET) != null){
             equipmentMatrix[0] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.HELMET).getTexture())));
         }else{
@@ -189,7 +187,7 @@ public class EquipmentEditorScreen implements Screen{
 
         stage.draw();
 
-        //stage.setDebugAll(true);
+        stage.setDebugAll(true);
         batch.end();
     }
 
@@ -222,373 +220,64 @@ public class EquipmentEditorScreen implements Screen{
 
 
     private void addBackpackMatrixListener() {
-        for (int i = 0; i < character.getBackpack().size() ; i++){
-            if(i == 0 && i < character.getBackpack().size() ){
-                backpackMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(character.getBackpack().get(0).getLevel() == character.getLevel()
-                                && ! character.getEquipment().containsKey(character.getBackpack().get(0).getItemType()) ) {
-                            Item itemtmp = character.getBackpack().remove(0);
-                            character.getEquipment().put(itemtmp.getItemType(),itemtmp);
-                            equipmentTable.clearChildren();
-                            buildEquipmentMatrix();
-                            addEquipmentMatrixListener();
-                            backpackTable.clearChildren();
-                            buildBackpackMatrix();
-                            addBackpackMatrixListener();
-                        }
-                        return true;
+        for (int i = 0; i < character.getBackpack().size() ; i++) {
+            backpackMatrix[i].addListener(new ClickListener(i) {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    if (character.getBackpack().get(button).getLevel() == character.getLevel()
+                            && !character.getEquipment().containsKey(character.getBackpack().get(getButton()).getItemType())) {
+                        Item itemtmp = character.getBackpack().remove(getButton());
+                        character.getEquipment().put(itemtmp.getItemType(), itemtmp);
+                        equipmentTable.clearChildren();
+                        buildEquipmentMatrix();
+                        addEquipmentMatrixListener();
+                        backpackTable.clearChildren();
+                        buildBackpackMatrix();
+                        addBackpackMatrixListener();
                     }
+                    return true;
+                }
 
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        backpackItemInfoLabel.setText(character.getBackpack().get(0).toString());
-                    }
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    backpackItemInfoLabel.setText(character.getBackpack().get(getButton()).toString());
+                }
 
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        backpackItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 1 && i < character.getBackpack().size() ){
-                backpackMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(character.getBackpack().get(1).getLevel() == character.getLevel()
-                                && ! character.getEquipment().containsKey(character.getBackpack().get(1).getItemType()) ) {
-                            Item itemtmp = character.getBackpack().remove(1);
-                            character.getEquipment().put(itemtmp.getItemType(),itemtmp);
-                            equipmentTable.clearChildren();
-                            buildEquipmentMatrix();
-                            addEquipmentMatrixListener();
-                            backpackTable.clearChildren();
-                            buildBackpackMatrix();
-                            addBackpackMatrixListener();
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        backpackItemInfoLabel.setText(character.getBackpack().get(1).toString());
-                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        backpackItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 2 && i < character.getBackpack().size() ){
-                backpackMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(character.getBackpack().get(2).getLevel() == character.getLevel()
-                                && ! character.getEquipment().containsKey(character.getBackpack().get(2).getItemType()) ) {
-                            Item itemtmp = character.getBackpack().remove(2);
-                            character.getEquipment().put(itemtmp.getItemType(),itemtmp);
-                            equipmentTable.clearChildren();
-                            buildEquipmentMatrix();
-                            addEquipmentMatrixListener();
-                            backpackTable.clearChildren();
-                            buildBackpackMatrix();
-                            addBackpackMatrixListener();
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        backpackItemInfoLabel.setText(character.getBackpack().get(2).toString());
-                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        backpackItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 3 && i < character.getBackpack().size() ){
-                backpackMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(character.getBackpack().get(3).getLevel() == character.getLevel()
-                                && ! character.getEquipment().containsKey(character.getBackpack().get(3).getItemType()) ) {
-                            Item itemtmp = character.getBackpack().remove(3);
-                            character.getEquipment().put(itemtmp.getItemType(),itemtmp);
-                            equipmentTable.clearChildren();
-                            buildEquipmentMatrix();
-                            addEquipmentMatrixListener();
-                            backpackTable.clearChildren();
-                            buildBackpackMatrix();
-                            addBackpackMatrixListener();
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        backpackItemInfoLabel.setText(character.getBackpack().get(3).toString());
-                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        backpackItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 4 && i < character.getBackpack().size() ){
-                backpackMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(character.getBackpack().get(4).getLevel() == character.getLevel()
-                                && ! character.getEquipment().containsKey(character.getBackpack().get(4).getItemType()) ) {
-                            Item itemtmp = character.getBackpack().remove(4);
-                            character.getEquipment().put(itemtmp.getItemType(),itemtmp);
-                            equipmentTable.clearChildren();
-                            buildEquipmentMatrix();
-                            addEquipmentMatrixListener();
-                            backpackTable.clearChildren();
-                            buildBackpackMatrix();
-                            addBackpackMatrixListener();
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        backpackItemInfoLabel.setText(character.getBackpack().get(4).toString());
-                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        backpackItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 5 && i < character.getBackpack().size() ){
-                backpackMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(character.getBackpack().get(5).getLevel() == character.getLevel()
-                                && ! character.getEquipment().containsKey(character.getBackpack().get(5).getItemType()) ) {
-                            Item itemtmp = character.getBackpack().remove(5);
-                            character.getEquipment().put(itemtmp.getItemType(),itemtmp);
-                            equipmentTable.clearChildren();
-                            buildEquipmentMatrix();
-                            addEquipmentMatrixListener();
-                            backpackTable.clearChildren();
-                            buildBackpackMatrix();
-                            addBackpackMatrixListener();
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        backpackItemInfoLabel.setText(character.getBackpack().get(5).toString());
-                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        backpackItemInfoLabel.setText("");
-                    }
-                });
-            }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    backpackItemInfoLabel.setText("");
+                }
+            });
         }
     }
 
 
     private void addEquipmentMatrixListener() {
         for (int i = 0; i < equipmentMatrix.length ; i++){
-            if(i == 0 ){
-                equipmentMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        character.getBackpack().add(character.getEquipment().remove(Item.ItemType.HELMET));
-                        equipmentTable.clearChildren();
-                        buildEquipmentMatrix();
-                        addEquipmentMatrixListener();
-                        backpackTable.clearChildren();
-                        buildBackpackMatrix();
-                        addBackpackMatrixListener();
-                        return true;
-                    }
+            equipmentMatrix[i].addListener(new ClickListener(i) {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    character.getBackpack().add(character.getEquipment().remove(Item.ItemType.getItemType(getButton())));
+                    equipmentTable.clearChildren();
+                    buildEquipmentMatrix();
+                    addEquipmentMatrixListener();
+                    backpackTable.clearChildren();
+                    buildBackpackMatrix();
+                    addBackpackMatrixListener();
+                    return true;
+                }
 
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(character.getEquipment().get(Item.ItemType.HELMET) != null){
-                            equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.HELMET).toString());
-                        }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    if(character.getEquipment().get(Item.ItemType.getItemType(getButton())) != null){
+                        equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.getItemType(getButton())).toString());
                     }
+                }
 
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        equipmentItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 1 ){
-                equipmentMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        character.getBackpack().add(character.getEquipment().remove(Item.ItemType.ARMOR));
-                        equipmentTable.clearChildren();
-                        buildEquipmentMatrix();
-                        addEquipmentMatrixListener();
-                        backpackTable.clearChildren();
-                        buildBackpackMatrix();
-                        addBackpackMatrixListener();
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(character.getEquipment().get(Item.ItemType.ARMOR) != null){
-                            equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.ARMOR).toString());
-                        }                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        equipmentItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 2 ){
-                equipmentMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        character.getBackpack().add(character.getEquipment().remove(Item.ItemType.WEAPON));
-                        equipmentTable.clearChildren();
-                        buildEquipmentMatrix();
-                        addEquipmentMatrixListener();
-                        backpackTable.clearChildren();
-                        buildBackpackMatrix();
-                        addBackpackMatrixListener();
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(character.getEquipment().get(Item.ItemType.WEAPON) != null){
-                            equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.WEAPON).toString());
-                        }                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        equipmentItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 3 ){
-                equipmentMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        character.getBackpack().add(character.getEquipment().remove(Item.ItemType.BELT));
-                        equipmentTable.clearChildren();
-                        buildEquipmentMatrix();
-                        addEquipmentMatrixListener();
-                        backpackTable.clearChildren();
-                        buildBackpackMatrix();
-                        addBackpackMatrixListener();
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(character.getEquipment().get(Item.ItemType.BELT) != null){
-                            equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.BELT).toString());
-                        }
-                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        equipmentItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 4 ){
-                equipmentMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        character.getBackpack().add(character.getEquipment().remove(Item.ItemType.SHIELD));
-                        equipmentTable.clearChildren();
-                        buildEquipmentMatrix();
-                        addEquipmentMatrixListener();
-                        backpackTable.clearChildren();
-                        buildBackpackMatrix();
-                        addBackpackMatrixListener();
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(character.getEquipment().get(Item.ItemType.SHIELD) != null){
-                            equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.SHIELD).toString());
-                        }
-                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        equipmentItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 5  ){
-                equipmentMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        character.getBackpack().add(character.getEquipment().remove(Item.ItemType.BOOTS));
-                        equipmentTable.clearChildren();
-                        buildEquipmentMatrix();
-                        addEquipmentMatrixListener();
-                        backpackTable.clearChildren();
-                        buildBackpackMatrix();
-                        addBackpackMatrixListener();
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(character.getEquipment().get(Item.ItemType.BOOTS) != null){
-                            equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.BOOTS).toString());
-                        }
-                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        equipmentItemInfoLabel.setText("");
-                    }
-                });
-            }
-            if(i == 6 ){
-                equipmentMatrix[i].addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        character.getBackpack().add(character.getEquipment().remove(Item.ItemType.RING));
-                        equipmentTable.clearChildren();
-                        buildEquipmentMatrix();
-                        addEquipmentMatrixListener();
-                        backpackTable.clearChildren();
-                        buildBackpackMatrix();
-                        addBackpackMatrixListener();
-                        return true;
-                    }
-
-                    @Override
-                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                        if(character.getEquipment().get(Item.ItemType.RING) != null){
-                            equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.RING).toString());
-                        }                    }
-
-                    @Override
-                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                        equipmentItemInfoLabel.setText("");
-                    }
-                });
-            }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    equipmentItemInfoLabel.setText("");
+                }
+            });
         }
     }
 
