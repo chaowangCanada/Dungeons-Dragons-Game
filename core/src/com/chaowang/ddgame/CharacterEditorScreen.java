@@ -138,7 +138,7 @@ public class CharacterEditorScreen implements Screen {
 		editorTable.row();
 		editorTable.add(new Label("Level", MainMenu.style));
 		editorTable.add(levelText);
-		editorTable.add(new Label("1-9", MainMenu.style));
+		editorTable.add(new Label("1 - 9", MainMenu.style));
 		editorTable.row();
 		editorTable.add(raceLeftButton).size(50, 50);
 		editorTable.add(raceLabel).center();
@@ -188,7 +188,6 @@ public class CharacterEditorScreen implements Screen {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				if (levelText.getText().matches("^[1-9]$") && Integer.parseInt(wisdomLabel.getText().toString())!=0 ) {
-					System.out.println(wisdomLabel.getText());
 					character.setLevel(Integer.parseInt(levelText.getText()));
 					character.setName(nameText.getText());
 					MainMenu.characterInventory.addToInventory(character);
@@ -248,8 +247,9 @@ public class CharacterEditorScreen implements Screen {
 		diceButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$")) {
+				if (levelText.getText().matches("^[1-9]$") && (Integer.parseInt(strengthLabel.getText().toString())==0 )) {
 					int multiplier = Integer.parseInt(levelText.getText()) / 2;
+					levelText.setDisabled(true);
 					character.setStrength(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
 					character.setDexterity(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
 					character.setConstitution(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
@@ -264,9 +264,10 @@ public class CharacterEditorScreen implements Screen {
 					intellegenceLabel.setText(Integer.toString(character.getIntelligence()));
 					charismaLabel.setText(Integer.toString(character.getCharisma()));
 
-					character.setHitPoints(AbilityModifier.hitPointModifier(character.getConstitution(),character.getLevel()));
+					character.setHitPoints(AbilityModifier.hitPointModifier(character.getConstitution(), character.getLevel()));
+					System.out.println("Dexterity is" + character.getDexterity() );
 					character.setArmorClass(AbilityModifier.armorClassModifier(character.getDexterity()));
-					character.setAttackBonus(AbilityModifier.attachBonusModifier(character.getStrength(),character.getDexterity(), character.getLevel()));
+					character.setAttackBonus(AbilityModifier.attachBonusModifier(character.getStrength(), character.getDexterity(), character.getLevel()));
 					character.setDamageBonus(AbilityModifier.damageBonusModifier(character.getStrength()));
 
 					hitpointLabel.setText(Integer.toString(character.getHitPoints()));

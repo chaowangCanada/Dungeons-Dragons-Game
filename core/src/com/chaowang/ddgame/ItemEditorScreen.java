@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -25,7 +26,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Items.Item;
 import Items.ItemInventory;
-import sun.applet.Main;
 
 public class ItemEditorScreen implements Screen {
     private Game game;
@@ -70,7 +70,7 @@ public class ItemEditorScreen implements Screen {
 
 		item = new Item();
 		nameText = new TextField(item.getName(), MainMenu.skin);
-		levelText = new TextField("Integer 1-5", MainMenu.skin);
+		levelText = new TextField("0", MainMenu.skin);
 		itemLabel = new Label(item.getItemType().toString(), MainMenu.style);
 		abilityLabel = new Label(item.getEnchantedAbility().toString(), MainMenu.style);
 		itemImage = new Image(item.getTexture());
@@ -131,6 +131,7 @@ public class ItemEditorScreen implements Screen {
 		editorTable.row();
 		editorTable.add(new Label("Level", MainMenu.style));
 		editorTable.add(levelText);
+		editorTable.add(new Label("1 - 5", MainMenu.style));
 		editorTable.row();
 		editorTable.add(itemLeftButton).size(50, 50);
 		editorTable.add(itemLabel).center();
@@ -163,6 +164,7 @@ public class ItemEditorScreen implements Screen {
 				return true;
 			}
 		});
+		
 		stage.addActor(itemSaveButton);
 
 		// Right hand side

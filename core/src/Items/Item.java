@@ -146,7 +146,6 @@ public class Item {
         }
         else{
             abilityPointer ++;
-            System.out.println(abilityPointer);
             this.enchantedAbility = this.itemType.abilityArr[abilityPointer];
             return true;
         }
@@ -158,7 +157,6 @@ public class Item {
         }
         else{
             abilityPointer --;
-            System.out.println(abilityPointer);
             this.enchantedAbility = this.itemType.abilityArr[abilityPointer];
             return true;
         }

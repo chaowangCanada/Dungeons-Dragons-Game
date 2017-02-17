@@ -10,6 +10,7 @@ import java.util.HashMap;
 import Classes.Class.ClassType;
 import Items.*;
 import Races.Race.RaceType;
+import util.AbilityModifier;
 
 public class Character {
     public static final int FIGHTATTRUBUTESIZE = 4;
@@ -63,10 +64,11 @@ public class Character {
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
         System.arraycopy(abilityArr, 0 , subAbilityArr , 0, Abilities.ABILITYSIZE);
         this.abilities = new Abilities(subAbilityArr);
-        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE]);
-        this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+1]);
-        this.setAttackBonus(abilityArr[Abilities.ABILITYSIZE+2]);
-        this.setDamageBonus(abilityArr[Abilities.ABILITYSIZE+3]);
+        this.setArmorClass(abilityArr[Abilities.ABILITYSIZE+0]);
+        this.setAttackBonus(abilityArr[Abilities.ABILITYSIZE+1]);
+        this.setDamageBonus(abilityArr[Abilities.ABILITYSIZE+2]);
+        this.setHitPoints(abilityArr[Abilities.ABILITYSIZE+3]);
+
     }
 
     public Character(String name, int level, RaceType raceType, int[] abilityArr, ArrayList<Item> backpack) {
@@ -161,6 +163,55 @@ public class Character {
     public void setEquipment(HashMap<Item.ItemType, Item> equipment) {
         this.equipment = equipment;
     }
+    
+    public void loadEquipment(Item item) {
+    	equipment.put(item.getItemType(), item);
+    	int index = item.getEnchantedAbility().getIndex();
+    	if( index < Abilities.ABILITYSIZE){
+    		int addArmorClass = armorClass - AbilityModifier.armorClassModifier(getDexterity());
+    		int addAttackBonus = attackBonus - AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel());
+    		int addDamageBonus = damageBonus - AbilityModifier.damageBonusModifier(getStrength());
+    		
+        	abilities.setAbility(index, abilities.getAbilityArr()[index] + item.getLevel());
+			setArmorClass(AbilityModifier.armorClassModifier(getDexterity()) + addArmorClass);
+			setAttackBonus(AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setDamageBonus(AbilityModifier.damageBonusModifier(getStrength()) + addDamageBonus);
+    	}
+    	if( index == Abilities.ABILITYSIZE){
+        	this.setArmorClass(getArmorClass() + item.getLevel());
+    	}
+    	if( index == Abilities.ABILITYSIZE + 1){
+        	this.setAttackBonus(getAttackBonus() + item.getLevel());
+    	}
+    	if( index == Abilities.ABILITYSIZE + 2){
+        	this.setDamageBonus(getDamageBonus() + item.getLevel());
+    	}
+    }
+    
+    public Item removeEquipment(Item.ItemType itemType) {
+    	Item item = equipment.remove(itemType);
+    	int index = item.getEnchantedAbility().getIndex();
+    	if( index < Abilities.ABILITYSIZE){
+    		int addArmorClass = armorClass - AbilityModifier.armorClassModifier(getDexterity());
+    		int addAttackBonus = attackBonus - AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel());
+    		int addDamageBonus = damageBonus - AbilityModifier.damageBonusModifier(getStrength());
+    		
+        	abilities.setAbility(index, abilities.getAbilityArr()[index] - item.getLevel());
+			setArmorClass(AbilityModifier.armorClassModifier(getDexterity()) + addArmorClass);
+			setAttackBonus(AbilityModifier.attachBonusModifier(getStrength(),getDexterity(), getLevel()) + addAttackBonus);
+			setDamageBonus(AbilityModifier.damageBonusModifier(getStrength()) + addDamageBonus);
+    	}
+    	if( index == Abilities.ABILITYSIZE){
+        	this.setArmorClass(getArmorClass() - item.getLevel());
+    	}
+    	if( index == Abilities.ABILITYSIZE + 1){
+        	this.setAttackBonus(getAttackBonus() - item.getLevel());
+    	}
+    	if( index == Abilities.ABILITYSIZE + 2){
+        	this.setDamageBonus(getDamageBonus() - item.getLevel());
+    	}
+		return item;
+    }
 
     public int getHitPoints() {
 		return hitPoints;
@@ -200,10 +251,6 @@ public class Character {
 
 	public int getLevel() {
 		return level;
-	}
-
-	public void decrementHP(int hp) {
-		hitPoints -=  hp;
 	}
 
 
@@ -288,10 +335,10 @@ public class Character {
 	public int[] getAllAttributes(){
         int[] attributeArr = new int[Abilities.ABILITYSIZE + Character.FIGHTATTRUBUTESIZE];
         System.arraycopy(abilities.getAbilityArr(), 0 , attributeArr , 0, Abilities.ABILITYSIZE);
-        attributeArr[Abilities.ABILITYSIZE ] = hitPoints;
-        attributeArr[Abilities.ABILITYSIZE + 1] = armorClass;
-        attributeArr[Abilities.ABILITYSIZE + 2] = attackBonus;
-        attributeArr[Abilities.ABILITYSIZE + 3] = damageBonus;
+        attributeArr[Abilities.ABILITYSIZE ] = armorClass;
+        attributeArr[Abilities.ABILITYSIZE + 1] = attackBonus;
+        attributeArr[Abilities.ABILITYSIZE + 2] = damageBonus;
+        attributeArr[Abilities.ABILITYSIZE + 3] = hitPoints;
         return attributeArr;
     }
 

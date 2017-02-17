@@ -141,7 +141,7 @@ public class EquipmentEditorScreen implements Screen{
         }
         equipmentTable.add(equipmentMatrix[2]).width(PublicParameter.itemCellWidth).height(PublicParameter.itemCellHeight);
         if(character.getEquipment().get(Item.ItemType.BELT) != null){
-            equipmentMatrix[3] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.BELT).getTexture())));
+            equipmentMatrix[3] = new ImageButton(new TextureRegionDrawable(new TextureRegion(character.getEquipment().get(Item.ItemType.BELT).getTexture())));;
         }else{
             equipmentMatrix[3] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
         }
@@ -227,7 +227,7 @@ public class EquipmentEditorScreen implements Screen{
                     if (character.getBackpack().get(button).getLevel() == character.getLevel()
                             && !character.getEquipment().containsKey(character.getBackpack().get(getButton()).getItemType())) {
                         Item itemtmp = character.getBackpack().remove(getButton());
-                        character.getEquipment().put(itemtmp.getItemType(), itemtmp);
+                        character.loadEquipment(itemtmp);
                         equipmentTable.clearChildren();
                         buildEquipmentMatrix();
                         addEquipmentMatrixListener();
@@ -256,7 +256,7 @@ public class EquipmentEditorScreen implements Screen{
             equipmentMatrix[i].addListener(new ClickListener(i) {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    character.getBackpack().add(character.getEquipment().remove(Item.ItemType.getItemType(getButton())));
+                    character.getBackpack().add(character.removeEquipment(Item.ItemType.getItemType(getButton())));
                     equipmentTable.clearChildren();
                     buildEquipmentMatrix();
                     addEquipmentMatrixListener();
