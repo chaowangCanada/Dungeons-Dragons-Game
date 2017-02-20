@@ -2,6 +2,7 @@ package com.chaowang.ddgame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -234,7 +236,7 @@ public class MapEditorScreen implements Screen{
 
 		stage.draw();
 
-		stage.setDebugAll(true);
+		//stage.setDebugAll(true);
 		batch.end();
 	}
 
@@ -286,6 +288,11 @@ public class MapEditorScreen implements Screen{
                     matrixPointer = -1;
                     itemCarrier = MainMenu.itemInventory.getItemPack().get(index);
                 }
+                else{
+                	new Dialog("Error", MainMenu.skin, "dialog") {
+                	}.text("Item level not same as map level").button("OK", true).key(Keys.ENTER, true)
+                	    .show(stage);
+                }
 			}
 		});
 
@@ -300,6 +307,11 @@ public class MapEditorScreen implements Screen{
                     matrixPointer = -2;
                     characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
                 }
+                else{
+                	new Dialog("Error", MainMenu.skin, "dialog") {
+                	}.text("Character level not same as map level").button("OK", true).key(Keys.ENTER, true)
+                	    .show(stage);
+                }
             }
         });
 
@@ -312,6 +324,11 @@ public class MapEditorScreen implements Screen{
                     int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
                     matrixPointer = -3;
                     characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
+                }
+                else{
+                	new Dialog("Error", MainMenu.skin, "dialog") {
+                	}.text("Character level not same as map level").button("OK", true).key(Keys.ENTER, true)
+                	    .show(stage);
                 }
             }
         });
