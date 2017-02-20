@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -37,10 +38,12 @@ public class MapEditorScreen implements Screen{
 
 	private ImageButton[] mapMatrix, elementList;
 	private Table mapTable, elementTable, inputTable;
-	private SelectBox<Item> itemSelectBox;
-	private SelectBox<Character> characterSelectBox;
+	private SelectBox<String> itemSelectBox, friendlySelectBox, hostileSelectBox;
 
 	private Map map;
+	private int matrixPointer = 0;
+    private Item itemCarrier;
+    private Character characterCarrier;
 
 	public MapEditorScreen (Game game) {
 		this.game = game;
@@ -54,6 +57,7 @@ public class MapEditorScreen implements Screen{
 		batch = new SpriteBatch();
 
 		map = new Map();
+		matrixPointer = 0;
 
 		backwardButton = new TextButton("<--", MainMenu.buttonStyle);
 		backwardButton.setWidth(Gdx.graphics.getWidth() / 20 );
@@ -103,7 +107,7 @@ public class MapEditorScreen implements Screen{
 					map.setLevel(Integer.parseInt(levelField.getText()));
 					map.setName(nameField.getText());
 					buildMapMatrix();
-					//addMapMatrixListener();
+					addMapMatrixListener();
 					sizeField.setDisabled(true);
 					levelField.setDisabled(true);
 					nameField.setDisabled(true);
@@ -123,7 +127,7 @@ public class MapEditorScreen implements Screen{
 
 		elementList = new ImageButton[PublicParameter.mapPixelType];
 		buildElementList();
-		//addElementListListener();
+		addElementListListener();
 
 		stage.addActor(elementTable);
 
@@ -143,14 +147,21 @@ public class MapEditorScreen implements Screen{
 		stage.addActor(saveButton);
 	}
 
-
-
 	private void buildMapMatrix() {
 		int size = map.getSize();
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				switch (map.getLocationMatrix()[i][j]){
-					case 1:
+ 				switch (map.getLocationMatrix()[i][j]){
+                    case -3:
+                        mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/enemy.png")))));
+                        break;
+                    case -2:
+                        mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/friend.png")))));
+                        break;
+                    case -1:
+                        mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/chest.png")))));
+                        break;
+                    case 1:
 						mapMatrix[(i * size) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/map/wall.png")))));
 						break;
 					case 2:
@@ -189,15 +200,20 @@ public class MapEditorScreen implements Screen{
 			elementTable.add(elementList[i]).fill().expandX();
 		}
 		elementTable.row();
-		elementTable.add(new Label("Character ",MainMenu.style));
-		characterSelectBox = new SelectBox<Character>(MainMenu.skin);
-		characterSelectBox.setDisabled(true);
-		elementTable.add(characterSelectBox).colspan(3);
-		elementTable.row();
 		elementTable.add(new Label("Item", MainMenu.style));
-		itemSelectBox = new SelectBox<Item>(MainMenu.skin);
-		itemSelectBox.setDisabled(true);
+		itemSelectBox = new SelectBox<String>(MainMenu.skin);
+		itemSelectBox.setItems(MainMenu.itemInventory.getItemPackInfo());
 		elementTable.add(itemSelectBox).colspan(3);
+		elementTable.row();
+		elementTable.add(new Label("Friendly ",MainMenu.style));
+		friendlySelectBox = new SelectBox<String>(MainMenu.skin);
+		friendlySelectBox.setItems(MainMenu.characterInventory.getCharacterListInfo());
+		elementTable.add(friendlySelectBox).colspan(3);
+		elementTable.row();
+		elementTable.add(new Label("Hostile ", MainMenu.style));
+		hostileSelectBox = new SelectBox<String>(MainMenu.skin);
+		hostileSelectBox.setItems(MainMenu.characterInventory.getCharacterListInfo());
+		elementTable.add(hostileSelectBox).colspan(3);
 
 	}
 
@@ -248,68 +264,96 @@ public class MapEditorScreen implements Screen{
 		stage.dispose();
 	}
 
-//
-//
-//	private void addBackpackMatrixListener() {
-//		for (int i = 0; i < character.getBackpack().size() ; i++) {
-//			backpackMatrix[i].addListener(new ClickListener(i) {
-//				@Override
-//				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//					if (character.getBackpack().get(button).getLevel() == character.getLevel()
-//							&& !character.getEquipment().containsKey(character.getBackpack().get(getButton()).getItemType())) {
-//						Item itemtmp = character.getBackpack().remove(getButton());
-//						character.loadEquipment(itemtmp);
-//						equipmentTable.clearChildren();
-//						buildEquipmentMatrix();
-//						addEquipmentMatrixListener();
-//						backpackTable.clearChildren();
-//						buildBackpackMatrix();
-//						addBackpackMatrixListener();
-//					}
-//					return true;
-//				}
-//
-//				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//					backpackItemInfoLabel.setText(character.getBackpack().get(getButton()).toString());
-//				}
-//
-//				@Override
-//				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-//					backpackItemInfoLabel.setText("");
-//				}
-//			});
-//		}
-//	}
-//
-//
-//	private void addEquipmentMatrixListener() {
-//		for (int i = 0; i < equipmentMatrix.length ; i++){
-//			equipmentMatrix[i].addListener(new ClickListener(i) {
-//				@Override
-//				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//					character.getBackpack().add(character.removeEquipment(Item.ItemType.getItemType(getButton())));
-//					equipmentTable.clearChildren();
-//					buildEquipmentMatrix();
-//					addEquipmentMatrixListener();
-//					backpackTable.clearChildren();
-//					buildBackpackMatrix();
-//					addBackpackMatrixListener();
-//					return true;
-//				}
-//
-//				@Override
-//				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//					if(character.getEquipment().get(Item.ItemType.getItemType(getButton())) != null){
-//						equipmentItemInfoLabel.setText(character.getEquipment().get(Item.ItemType.getItemType(getButton())).toString());
-//					}
-//				}
-//
-//				@Override
-//				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-//					equipmentItemInfoLabel.setText("");
-//				}
-//			});
-//		}
-//	}
+	private void addElementListListener(){
+		for (int i = 0; i < elementList.length; i++){
+			elementList[i].addListener(new ClickListener(i){
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					matrixPointer = getButton();
+					return true;
+				}
+			});
+		}
+
+		itemSelectBox.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				String text = itemSelectBox.getSelected();
+                int level = Integer.parseInt(text.substring(text.lastIndexOf('-')+1));
+                System.out.println("item level is "+ level);
+                if(level == map.getLevel()){
+                    int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+                    matrixPointer = -1;
+                    itemCarrier = MainMenu.itemInventory.getItemPack().get(index);
+                }
+			}
+		});
+
+        friendlySelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String text = friendlySelectBox.getSelected();
+                int level = Integer.parseInt(text.substring(text.lastIndexOf('-')+1));
+                if(level == map.getLevel()) {
+                    int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+                    System.out.println("friend level is "+ level);
+                    matrixPointer = -2;
+                    characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
+                }
+            }
+        });
+
+        hostileSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String text = hostileSelectBox.getSelected();
+                int level = Integer.parseInt(text.substring(text.lastIndexOf('-')+1));
+                if(level == map.getLevel()) {
+                    int index = Integer.parseInt(text.substring(0, text.indexOf('-')));
+                    matrixPointer = -3;
+                    characterCarrier = MainMenu.characterInventory.getChatacterPack().get(index);
+                }
+            }
+        });
+	}
+
+	private void addMapMatrixListener() {
+		for (int i = 0; i < mapMatrix.length; i++) {
+			mapMatrix[i].addListener(new ClickListener(i) {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    int i = getButton() / map.getSize();
+                    int j = getButton() % map.getSize();
+                    switch (map.getLocationMatrix()[i][j]){
+                        case -3:
+                            map.removeEnemyLocationList(i,j);
+                            break;
+                        case -2:
+                            map.removeFriendLocationList(i,j);
+                            break;
+                        case -1:
+                            map.removeItemLocationList(i,j);
+                            break;
+                    }
+					map.getLocationMatrix()[i][j] = matrixPointer;
+                    switch (map.getLocationMatrix()[i][j]){
+                        case -3:
+                            map.addEnemyLocationList(i,j,characterCarrier);
+                            break;
+                        case -2:
+                            map.addFriendLocationList(i,j,characterCarrier);
+                            break;
+                        case -1:
+                            map.addItemLocationList(i,j, itemCarrier);
+                            break;
+                    }
+					mapTable.clearChildren();
+					buildMapMatrix();
+					addMapMatrixListener();
+					return true;
+				}
+			});
+		}
+	}
 
 }

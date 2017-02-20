@@ -22,6 +22,15 @@ public class ItemInventory {
         return itemPack;
     }
 
+    public Array<String> getItemPackInfo(){
+        Array<String> itemPackInfo = new Array<String>();
+        for (int i = 0; i < itemPack.size; i++){
+            itemPackInfo.add(i +"-" + itemPack.get(i).getName() + "-"+
+                    itemPack.get(i).getItemType().toString()+"-"+itemPack.get(i).getLevel());
+        }
+        return itemPackInfo;
+    }
+
     public void setItemPack(Array<Item> itemPack) {
         this.itemPack = itemPack;
     }

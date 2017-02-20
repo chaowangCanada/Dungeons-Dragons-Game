@@ -23,12 +23,17 @@ public class CharacterInventory {
         return chatacterPack;
     }
 
-    public void setChatacterPack(Array<Character> characterPack) {
-        this.chatacterPack = characterPack;
-    }
-
     public void addToInventory(Character character){
          chatacterPack.add(character);
+    }
+
+    public Array<String> getCharacterListInfo(){
+        Array<String> itemPackInfo = new Array<String>();
+        for (int i = 0; i < chatacterPack.size; i++){
+            itemPackInfo.add(i +"-" + chatacterPack.get(i).getName() + "-"+
+                    chatacterPack.get(i).getRaceType().toString()+"-"+chatacterPack.get(i).getLevel());
+        }
+        return itemPackInfo;
     }
 
     public  void readFile() throws IOException {

@@ -26,6 +26,7 @@ public class Character {
 	private int hitPoints;
 	private int armorClass;
     private Texture texture;
+	boolean isFriendly = true;
 
     private HashMap<Item.ItemType,Item> equipment;
     private ArrayList<Item> backpack;
@@ -102,7 +103,15 @@ public class Character {
         }
     }
 
-    public boolean nextRace(){
+	public boolean getFriendly() {
+		return isFriendly;
+	}
+
+	public void setFriendly(boolean friend) {
+		isFriendly = friend;
+	}
+
+	public boolean nextRace(){
         if(raceType.getIndex() >= 6 ){
             return false;
         }

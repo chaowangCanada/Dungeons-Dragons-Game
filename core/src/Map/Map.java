@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Items.Item;
+import Character.Character;
 
 public class Map {
 
@@ -18,7 +19,8 @@ public class Map {
     private ExitDoor exitDoor;
     private ArrayList<Wall> wallLocationList;
     private HashMap<Vector2,Item> itemLocationList;
-    private HashMap<Vector2,Character> characterLocationList;
+    private HashMap<Vector2,Character> friendLocationList;
+    private HashMap<Vector2,Character> enemyLocationList;
 
     private int[][]  locationMatrix;
 
@@ -28,6 +30,9 @@ public class Map {
         this.size = 0;
         locationMatrix = new int[1][1];
         locationMatrix[0][0] = 0;
+        itemLocationList = new HashMap<Vector2, Item>();
+        friendLocationList = new HashMap<Vector2, Character>();
+        enemyLocationList = new HashMap<Vector2, Character>();
     }
 
     public Map(int level, int size, String name) {
@@ -39,6 +44,9 @@ public class Map {
             for (int j =0; j < size; j++)
                 locationMatrix[i][j] = 0;
         }
+        itemLocationList = new HashMap<Vector2, Item>();
+        friendLocationList = new HashMap<Vector2, Character>();
+        enemyLocationList = new HashMap<Vector2, Character>();
     }
 
     public Map(int level, int size, String name, EntryDoor entryEntryDoor, ExitDoor exitEntryDoor) {
@@ -65,16 +73,24 @@ public class Map {
         itemLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), item);
     }
 
-    public Item removeItemLocationList(int i, int j, Item item ){
+    public Item removeItemLocationList(int i, int j){
        return itemLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
     }
 
-    public void addCharacterLocationList(int i, int j, Character character ){
-        characterLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), character);
+    public void addFriendLocationList(int i, int j, Character character ){
+        friendLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), character);
     }
 
-    public Character removeCharacterLocationList(int i, int j, Item item ){
-        return characterLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
+    public Character removeFriendLocationList(int i, int j){
+        return friendLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
+    }
+
+    public void addEnemyLocationList(int i, int j, Character character ){
+        enemyLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), character);
+    }
+
+    public Character removeEnemyLocationList(int i, int j ){
+        return enemyLocationList.remove(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize));
     }
 
     public int[][] getLocationMatrix() {
@@ -138,12 +154,12 @@ public class Map {
         this.itemLocationList = itemLocationList;
     }
 
-    public HashMap<Vector2, Character> getCharacterLocationList() {
-        return characterLocationList;
+    public HashMap<Vector2, Character> getFriendLocationList() {
+        return friendLocationList;
     }
 
-    public void setCharacterLocationList(HashMap<Vector2, Character> enemyLocationList) {
-        this.characterLocationList = enemyLocationList;
+    public void setFriendLocationList(HashMap<Vector2, Character> enemyLocationList) {
+        this.friendLocationList = enemyLocationList;
     }
 
     public int getSize() {
