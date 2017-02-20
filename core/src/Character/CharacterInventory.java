@@ -2,6 +2,7 @@ package Character;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,22 +13,22 @@ import Races.Race;
 
 public class CharacterInventory {
 
-    private ArrayList<Character> chatacterPack;
+    private Array<Character> chatacterPack;
 
     public CharacterInventory() {
-        this.chatacterPack = new ArrayList<Character>();
+        this.chatacterPack = new Array<Character>();
     }
 
-    public ArrayList<Character> getChatacterPack() {
+    public Array<Character> getChatacterPack() {
         return chatacterPack;
     }
 
-    public void setChatacterPack(ArrayList<Character> characterPack) {
+    public void setChatacterPack(Array<Character> characterPack) {
         this.chatacterPack = characterPack;
     }
 
-    public boolean addToInventory(Character character){
-        return chatacterPack.add(character);
+    public void addToInventory(Character character){
+         chatacterPack.add(character);
     }
 
     public  void readFile() throws IOException {

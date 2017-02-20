@@ -196,7 +196,7 @@ public class ItemEditorScreen implements Screen {
 	private void buildInventoryMatrix() {
 		for (int i = 0; i < PublicParameter.itemInventoryRow; i++) {
 			for (int j = 0; j < PublicParameter.itemInventoryColumn; j++) {
-				if ((i * PublicParameter.itemInventoryColumn) + j < MainMenu.itemInventory.getItemPack().size() ) {
+				if ((i * PublicParameter.itemInventoryColumn) + j < MainMenu.itemInventory.getItemPack().size ) {
 					inventoryMatrix[(i * PublicParameter.itemInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenu.itemInventory.getItemPack().get(i * PublicParameter.itemInventoryColumn + j).getTexture())));
 				} else {
 					inventoryMatrix[(i * PublicParameter.itemInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
@@ -262,16 +262,16 @@ public class ItemEditorScreen implements Screen {
 
 
 	private void addInventoryMatrixListener() {
-		for (int i = 0; i < MainMenu.itemInventory.getItemPack().size() ; i++){
+		for (int i = 0; i < MainMenu.itemInventory.getItemPack().size ; i++){
 				inventoryMatrix[i].addListener(new ClickListener(i) {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					item = new Item(MainMenu.itemInventory.getItemPack().get(button).getItemType(),
-							MainMenu.itemInventory.getItemPack().get(button).getName(),
-							MainMenu.itemInventory.getItemPack().get(button).getLevel(),
-							MainMenu.itemInventory.getItemPack().get(button).getEnchantedAbility());
+					item = new Item(MainMenu.itemInventory.getItemPack().get(getButton()).getItemType(),
+							MainMenu.itemInventory.getItemPack().get(getButton()).getName(),
+							MainMenu.itemInventory.getItemPack().get(getButton()).getLevel(),
+							MainMenu.itemInventory.getItemPack().get(getButton()).getEnchantedAbility());
 					initialEditorItem();
-					MainMenu.itemInventory.getItemPack().remove(button);
+					MainMenu.itemInventory.getItemPack().removeIndex(getButton());
 					MainMenu.itemInventory.saveToFile();
 					inventoryTable.clearChildren();
 					buildInventoryMatrix();

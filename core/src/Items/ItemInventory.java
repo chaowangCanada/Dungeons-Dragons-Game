@@ -3,6 +3,7 @@ package Items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,22 +12,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ItemInventory {
-    private ArrayList<Item> itemPack;
+    private Array<Item> itemPack;
 
     public ItemInventory() {
-        this.itemPack = new ArrayList<Item>();
+        this.itemPack = new Array<Item>();
     }
 
-    public ArrayList<Item> getItemPack() {
+    public Array<Item> getItemPack() {
         return itemPack;
     }
 
-    public void setItemPack(ArrayList<Item> itemPack) {
+    public void setItemPack(Array<Item> itemPack) {
         this.itemPack = itemPack;
     }
 
-    public boolean addToInventory(Item item){
-        return itemPack.add(item);
+    public void addToInventory(Item item){
+        itemPack.add(item);
     }
     public  void readFile() throws IOException {
         File file = new File("itemInventory.txt");

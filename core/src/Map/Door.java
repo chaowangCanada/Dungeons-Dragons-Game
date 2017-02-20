@@ -1,32 +1,30 @@
-package com.chaowang.ddgame;
+package Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.chaowang.ddgame.PublicParameter;
 
-public class Tree {
+public class Door {
 
     Vector2 position, size;
-    Texture tree;
     Rectangle bounds;
 
-    public Tree(Vector2 position, Vector2 size){
+    public Door(Vector2 position, Vector2 size){
         this.position = position;
         this.size = size;
         bounds = new Rectangle(position.x, position.y, size.x , size.y );
-        tree = new Texture(Gdx.files.internal("android/assets/tree.png"));
+    }
+
+    public Door(Vector2 position) {
+        this(position, new Vector2(PublicParameter.mapPixelSize,PublicParameter.mapPixelSize));
     }
 
     public void update(){
         bounds.set(position.x, position.y, size.x , size.y);
 
-    }
-
-    public void draw(SpriteBatch batch){
-
-        batch.draw(tree, position.x, position.y, size.x, size.y);
     }
 
     public Vector2 getPosition() {

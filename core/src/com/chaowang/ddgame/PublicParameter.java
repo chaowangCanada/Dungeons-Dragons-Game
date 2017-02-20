@@ -15,5 +15,6 @@ public interface PublicParameter {
     int itemCellHeight = Gdx.graphics.getHeight() * 5 / 8 / itemInventoryColumn;
     int itemBackpackRow = 2, itemBackpackColumn = 5;
     int itemTypeCount = Item.ItemType.values().length;
+    int mapPixelType = 4, mapPixelSize = 64;
 
 }

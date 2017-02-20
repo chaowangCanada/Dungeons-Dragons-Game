@@ -114,7 +114,7 @@ class BackpackEditorScreen implements Screen {
     private void buildInventoryMatrix() {
         for (int i = 0; i < PublicParameter.itemInventoryRow; i++) {
             for (int j = 0; j < PublicParameter.itemInventoryColumn; j++) {
-                if ((i * PublicParameter.itemInventoryRow) + j < MainMenu.itemInventory.getItemPack().size()) {
+                if ((i * PublicParameter.itemInventoryRow) + j < MainMenu.itemInventory.getItemPack().size) {
                     inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenu.itemInventory.getItemPack().get(i * PublicParameter.itemInventoryRow + j).getTexture())));
                 } else {
                     inventoryMatrix[(i * PublicParameter.itemInventoryRow) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
@@ -201,7 +201,7 @@ class BackpackEditorScreen implements Screen {
 
 
     private void addInventoryMatrixListener() {
-        for (int i = 0; i < MainMenu.itemInventory.getItemPack().size() ; i++){
+        for (int i = 0; i < MainMenu.itemInventory.getItemPack().size ; i++){
             inventoryMatrix[i].addListener(new ClickListener(i) {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

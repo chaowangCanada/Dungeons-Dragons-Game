@@ -247,9 +247,9 @@ public class CharacterEditorScreen implements Screen {
 		diceButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (levelText.getText().matches("^[1-9]$") && (Integer.parseInt(strengthLabel.getText().toString())==0 )) {
+				if (levelText.getText().matches("^[1-9]$") ) {
+					character.setLevel(Integer.parseInt(levelText.getText()));
 					int multiplier = Integer.parseInt(levelText.getText()) / 2;
-					levelText.setDisabled(true);
 					character.setStrength(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
 					character.setDexterity(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
 					character.setConstitution(Dice.roll(Dice.DICENUMBER, Dice.DICESIDE + multiplier ));
@@ -319,7 +319,7 @@ public class CharacterEditorScreen implements Screen {
 	private void buildInventoryMatrix() {
 		for (int i = 0; i < PublicParameter.characterInventoryRow; i++) {
 			for (int j = 0; j < PublicParameter.characterInventoryColumn; j++) {
-				if ((i * PublicParameter.characterInventoryColumn) + j < MainMenu.characterInventory.getChatacterPack().size() ) {
+				if ((i * PublicParameter.characterInventoryColumn) + j < MainMenu.characterInventory.getChatacterPack().size ) {
 					inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(MainMenu.characterInventory.getChatacterPack().get(i * PublicParameter.characterInventoryColumn + j).getTexture())));
 				} else {
 					inventoryMatrix[(i * PublicParameter.characterInventoryColumn) + j] = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("android/assets/items/unknown.png")))));
@@ -386,7 +386,7 @@ public class CharacterEditorScreen implements Screen {
 
 
 	private void addInventoryMatrixListener() {
-		for (int i = 0; i < MainMenu.characterInventory.getChatacterPack().size() ; i++){
+		for (int i = 0; i < MainMenu.characterInventory.getChatacterPack().size ; i++){
 			inventoryMatrix[i].addListener(new ClickListener(i) {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -397,7 +397,7 @@ public class CharacterEditorScreen implements Screen {
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getAllAttributes(),
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getBackpack());
 					initialEditorItem();
-					MainMenu.characterInventory.getChatacterPack().remove(getButton());
+					MainMenu.characterInventory.getChatacterPack().removeIndex(getButton());
 					MainMenu.characterInventory.saveToFile();
 					inventoryTable.clearChildren();
 					buildInventoryMatrix();

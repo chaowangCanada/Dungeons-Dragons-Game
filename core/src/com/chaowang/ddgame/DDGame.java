@@ -16,7 +16,7 @@ public class DDGame extends Game {
 
 
 //		float w = Gdx.graphics.getWidth();
-//		float h = Gdx.graphics.getHeight();
+//		float h = Gdx.graphics.getHeight(;
 //
 //		camera = new OrthographicCamera(1, h/w);
 
