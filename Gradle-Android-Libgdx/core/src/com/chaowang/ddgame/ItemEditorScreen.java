@@ -133,7 +133,7 @@ public class ItemEditorScreen implements Screen {
 		editorTable.row();
 		editorTable.add(new Label("Level", MainMenu.style));
 		editorTable.add(levelText);
-		editorTable.add(new Label("1 - 5", MainMenu.style));
+		editorTable.add(new Label("1 - 9", MainMenu.style));
 		editorTable.row();
 		editorTable.add(itemLeftButton).size(50, 50);
 		editorTable.add(itemLabel).center();

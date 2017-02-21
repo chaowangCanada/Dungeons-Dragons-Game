@@ -2,6 +2,7 @@ package Character;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.chaowang.ddgame.PublicParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +60,7 @@ public class Character {
         this.classType = ClassType.FIGHTER;
         this.raceType  = raceType;
         this.level = level;
-        this.backpack = new ArrayList<Item>();
+        this.backpack = new ArrayList<Item>(PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow);
         this.equipment = new HashMap<Item.ItemType, Item>();
         updateTexture(raceType);
         int[] subAbilityArr = new int[Abilities.ABILITYSIZE];
