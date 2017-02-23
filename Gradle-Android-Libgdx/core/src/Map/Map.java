@@ -86,6 +86,7 @@ public class Map {
     }
 
     public void addEnemyLocationList(int i, int j, Character character ){
+    	character.setFriendly(false);
         enemyLocationList.put(new Vector2(j * PublicParameter.mapPixelSize, i * PublicParameter.mapPixelSize), character);
     }
 

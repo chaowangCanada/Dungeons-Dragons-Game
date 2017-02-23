@@ -4,6 +4,7 @@ package Items;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -53,12 +54,14 @@ public class ItemInventory {
     }
 
     public void saveToFile(){
-        FileHandle file = Gdx.files.local("itemInventory.txt");
-        file.write(false);
-        for (Item i : this.itemPack){
-            String str  = i.getItemType().toString() +"|" + i.getName() +"|" +  i.getLevel() +"|" + i.getEnchantedAbility().toString() + "\r\n";
-            file.writeString(str,true);
-        }
+//        FileHandle file = Gdx.files.local("itemInventory.txt");
+//        file.write(false);
+//        for (Item i : this.itemPack){
+//            String str  = i.getItemType().toString() +"|" + i.getName() +"|" +  i.getLevel() +"|" + i.getEnchantedAbility().toString() + "\r\n";
+//            file.writeString(str,true);
+//        }
+    	Json json = new Json();
+    	System.out.println(json.prettyPrint(this));
     }
 
 }

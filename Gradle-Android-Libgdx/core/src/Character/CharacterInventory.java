@@ -3,6 +3,7 @@ package Character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,25 +14,25 @@ import Races.Race;
 
 public class CharacterInventory {
 
-    private Array<Character> chatacterPack;
+    private Array<Character> characterPack;
 
     public CharacterInventory() {
-        this.chatacterPack = new Array<Character>();
+        this.characterPack = new Array<Character>();
     }
 
     public Array<Character> getChatacterPack() {
-        return chatacterPack;
+        return characterPack;
     }
 
     public void addToInventory(Character character){
-         chatacterPack.add(character);
+    	characterPack.add(character);
     }
 
     public Array<String> getCharacterListInfo(){
         Array<String> itemPackInfo = new Array<String>();
-        for (int i = 0; i < chatacterPack.size; i++){
-            itemPackInfo.add(i +"-" + chatacterPack.get(i).getName() + "-"+
-                    chatacterPack.get(i).getRaceType().toString()+"-"+chatacterPack.get(i).getLevel());
+        for (int i = 0; i < characterPack.size; i++){
+            itemPackInfo.add(i +"-" + characterPack.get(i).getName() + "-"+
+            		characterPack.get(i).getRaceType().toString()+"-"+characterPack.get(i).getLevel());
         }
         return itemPackInfo;
     }
@@ -60,15 +61,21 @@ public class CharacterInventory {
     }
 
     public void saveToFile(){
-        FileHandle file = Gdx.files.local("characterInventory.txt");
-        file.write(false);
-        for (Character i : this.chatacterPack){
-            String str  = i.getName()  +"|" +  i.getLevel() +"|" + i.getRaceType().toString() + "|"
-                            +i.getStrength() + "," + i.getDexterity() + "," + i.getConstitution() + ","
-                            +i.getWisdom() + "," +i.getIntelligence() + ","+i.getCharisma() + ","
-                            +i.getHitPoints() + "," +i.getArmorClass() + "," +i.getAttackBonus() + "," +i.getDamageBonus() + "\r\n";
-            file.writeString(str,true);
-        }
+//        FileHandle file = Gdx.files.local("characterInventory.txt");
+//        file.write(false);
+//        for (Character i : this.chatacterPack){
+//            String str  = i.getName()  +"|" +  i.getLevel() +"|" + i.getRaceType().toString() + "|"
+//                            +i.getStrength() + "," + i.getDexterity() + "," + i.getConstitution() + ","
+//                            +i.getWisdom() + "," +i.getIntelligence() + ","+i.getCharisma() + ","
+//                            +i.getHitPoints() + "," +i.getArmorClass() + "," +i.getAttackBonus() + "," +i.getDamageBonus() + "\r\n";
+//            file.writeString(str,true);
+//        }
+    	
+    	Json json = new Json();
+    	String text = json.toJson(characterPack.first());
+    	System.out.println(text);
+    	Character charact1 = json.fromJson(Character.class, text);
+    	System.out.println(charact1.toString());
     }
 
 }

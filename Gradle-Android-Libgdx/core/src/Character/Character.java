@@ -12,8 +12,10 @@ import Classes.Class.ClassType;
 import Items.*;
 import Races.Race.RaceType;
 import util.AbilityModifier;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
-public class Character {
+public class Character implements Json.Serializable{
     public static final int FIGHTATTRUBUTESIZE = 4;
 
 	private ClassType classType;
@@ -146,8 +148,8 @@ public class Character {
         return abilities;
     }
 
-    public void setAbilities(Abilities abilities) {
-        this.abilities = abilities;
+    public void setAbilities(int[] abilities) {
+        this.abilities.setAbilityArr(abilities);;
     }
 
     public Texture getTexture() {
@@ -360,6 +362,32 @@ public class Character {
 
 	public void setRaceType(RaceType raceType) {
 		this.raceType = raceType;
+	}
+
+	@Override
+	public void write(Json json) {
+		json.writeValue("ClassType", classType);
+		json.writeValue("RaceType", raceType);
+		json.writeValue("Name", name);
+		json.writeValue("Level", level);
+		json.writeValue("abilities", abilities);
+		json.writeValue("attackBonus", attackBonus);
+		json.writeValue("damageBonus", damageBonus);
+		json.writeValue("hitPoints", hitPoints);
+		json.writeValue("armorClass", armorClass);
+		json.writeValue("isFriendly", isFriendly);
+		json.writeValue("equipment", equipment);
+		json.writeValue("backPack", backpack);
+
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		classType = ClassType.valueOf(jsonData.child.asString());
+		raceType = RaceType.valueOf(jsonData.child.next.asString());
+		name = jsonData.child.next.next.asString();
+		level = jsonData.child.next.next.next.asInt();
+		setAbilities(jsonData.child.next.next.next.next.child.asIntArray());
 	}
 
 
