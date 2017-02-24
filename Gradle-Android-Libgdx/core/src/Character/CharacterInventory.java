@@ -31,12 +31,12 @@ public class CharacterInventory {
     }
 
     public Array<String> getCharacterListInfo(){
-        Array<String> itemPackInfo = new Array<String>();
+        Array<String> characterPackInfo = new Array<String>();
         for (int i = 0; i < characterPack.size; i++){
-            itemPackInfo.add(i +"-" + characterPack.get(i).getName() + "-"+
+            characterPackInfo.add(i +"-" + characterPack.get(i).getName() + "-"+
             		characterPack.get(i).getRaceType().toString()+"-"+characterPack.get(i).getLevel());
         }
-        return itemPackInfo;
+        return characterPackInfo;
     }
 
     public  void readFile() throws IOException {

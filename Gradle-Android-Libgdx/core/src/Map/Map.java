@@ -36,6 +36,7 @@ public class Map implements Json.Serializable{
         itemLocationList = new HashMap<Vector2, Item>();
         friendLocationList = new HashMap<Vector2, Character>();
         enemyLocationList = new HashMap<Vector2, Character>();
+        wallLocationList = new ArrayList<Wall>();
     }
 
     public Map(int level, int size, String name) {
@@ -47,6 +48,7 @@ public class Map implements Json.Serializable{
             for (int j =0; j < size; j++)
                 locationMatrix[i][j] = 0;
         }
+        wallLocationList = new ArrayList<Wall>(size);
         itemLocationList = new HashMap<Vector2, Item>();
         friendLocationList = new HashMap<Vector2, Character>();
         enemyLocationList = new HashMap<Vector2, Character>();
@@ -108,6 +110,7 @@ public class Map implements Json.Serializable{
             for (int j =0; j < size; j++)
                 locationMatrix[i][j] = 0;
         }
+        wallLocationList = new ArrayList<Wall>(size);
     }
 
     public String getName() {
@@ -126,11 +129,11 @@ public class Map implements Json.Serializable{
         this.level = level;
     }
 
-    public EntryDoor getEntryEntryDoor() {
+    public EntryDoor getEntryDoor() {
         return entryDoor;
     }
 
-    public void setEntryEntryDoor(EntryDoor entryDoor) {
+    public void setEntryDoor(EntryDoor entryDoor) {
         this.entryDoor = entryDoor;
     }
 
@@ -158,7 +161,17 @@ public class Map implements Json.Serializable{
         this.itemLocationList = itemLocationList;
     }
 
-    public HashMap<Vector2, Character> getFriendLocationList() {
+    
+    
+    public HashMap<Vector2, Character> getEnemyLocationList() {
+		return enemyLocationList;
+	}
+
+	public void setEnemyLocationList(HashMap<Vector2, Character> enemyLocationList) {
+		this.enemyLocationList = enemyLocationList;
+	}
+
+	public HashMap<Vector2, Character> getFriendLocationList() {
         return friendLocationList;
     }
 
@@ -215,8 +228,15 @@ public class Map implements Json.Serializable{
     public Vector2 getDistanceOfEntryExit(){
         return new Vector2( Math.abs(entryDoor.getPosition().x - exitDoor.getPosition().x), Math.abs(entryDoor.getPosition().y - exitDoor.getPosition().y));
     }
+    
+    
 
     @Override
+	public String toString() {
+		return name + "[ " + size + " x " + size +"]";
+	}
+
+	@Override
     public void write(Json json) {
         json.writeValue("Name", name);
         json.writeValue("Level", level);

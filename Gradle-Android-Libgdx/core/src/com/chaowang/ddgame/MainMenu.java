@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import Campaign.CampaignInventory;
+
 import java.io.IOException;
 
 import Items.ItemInventory;
@@ -27,11 +29,12 @@ public class MainMenu implements Screen{
 
     private Stage stage;
 
-    public static Label.LabelStyle style;
-    public static BitmapFont font;
+    public static Label.LabelStyle style, styleSec;
+    public static BitmapFont font, fontSec;
     public static ItemInventory itemInventory;
     public static CharacterInventory characterInventory;
     public static MapInventory mapInventory;
+    public static CampaignInventory campaignInventory;
     TextureAtlas buttonAtlas;
     private Texture backgroundTexture;
     public static TextButton.TextButtonStyle buttonStyle;
@@ -54,26 +57,22 @@ public class MainMenu implements Screen{
 
         font = new BitmapFont(Gdx.files.internal("android/assets/Style/default.fnt"),false);
         style = new Label.LabelStyle(font, Color.WHITE);
+        fontSec = new BitmapFont(Gdx.files.internal("android/assets/Style/font.fnt"),false);
+        styleSec = new Label.LabelStyle(fontSec, Color.RED);
+        
         itemInventory = new ItemInventory();
-        try {
-            itemInventory.readFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         characterInventory = new CharacterInventory();
+        mapInventory = new MapInventory();
+        campaignInventory = new CampaignInventory();
         try {
             characterInventory.readFile();
+            itemInventory.readFile();
+            mapInventory.readFile();
+            campaignInventory.readFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        mapInventory = new MapInventory();
-        try {
-            mapInventory.readFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         backgroundTexture =  new Texture(Gdx.files.internal("android/assets/dnd.png"));
 
@@ -161,7 +160,7 @@ public class MainMenu implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.clear();
-                game.setScreen(new TableScreen(game));
+                game.setScreen(new CampaignEditorScreen(game));
                 return true;
             }
         });

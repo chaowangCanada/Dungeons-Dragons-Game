@@ -208,7 +208,6 @@ class BackpackEditorScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if(MainMenu.itemInventory.getItemPack().get(getButton()).getLevel() == character.getLevel()) {
-                        System.out.println(character.getBackpack().size());
                         if(character.getBackpack().size() < PublicParameter.itemBackpackColumn * PublicParameter.itemBackpackRow){
                             Item item = new Item(MainMenu.itemInventory.getItemPack().get(getButton()).getItemType(),
                                     MainMenu.itemInventory.getItemPack().get(getButton()).getName(),

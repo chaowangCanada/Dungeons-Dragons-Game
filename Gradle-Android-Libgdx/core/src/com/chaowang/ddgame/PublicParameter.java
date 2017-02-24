@@ -16,5 +16,10 @@ public interface PublicParameter {
     int itemBackpackRow = 2, itemBackpackColumn = 5;
     int itemTypeCount = Item.ItemType.values().length;
     int mapPixelType = 4, mapPixelSize = 64;
+    int mapInventoryRow = 5, mapInventoryColumn = 5;
+    int mapCellWidth = Gdx.graphics.getHeight() * 5 / 8 / itemInventoryRow;
+    int mapCellHeight = Gdx.graphics.getHeight() * 3 / 8 / itemInventoryColumn;
+    int campaignInventorySize = 6;
+
 
 }

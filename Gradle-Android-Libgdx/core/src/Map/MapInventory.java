@@ -16,25 +16,29 @@ public class MapInventory {
 
     private Array<Map> mapPack;
 
-    public MapInventory() {
+	public MapInventory() {
         this.mapPack = new Array<Map>();
     }
 
-    public Array<Map> getChatacterPack() {
+    public void setMapPack(Array<Map> mapPack) {
+		this.mapPack = mapPack;
+	}
+    
+    public Array<Map> getMapPack() {
         return mapPack;
     }
 
-    public void addToInventory(Map character){
-    	mapPack.add(character);
+    public void addToInventory(Map Map){
+    	mapPack.add(Map);
     }
 
-    public Array<String> getCharacterListInfo(){
-        Array<String> itemPackInfo = new Array<String>();
+    public Array<String> getMapListInfo(){
+        Array<String> mapPackInfo = new Array<String>();
         for (int i = 0; i < mapPack.size; i++){
-            itemPackInfo.add(i +"-" + mapPack.get(i).getName() + "-"+
+        	mapPackInfo.add(i +"-" + mapPack.get(i).getName() + "-"+
             		mapPack.get(i).getSize()+"-"+mapPack.get(i).getLevel());
         }
-        return itemPackInfo;
+        return mapPackInfo;
     }
 
     public  void readFile() throws IOException {
