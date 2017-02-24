@@ -402,7 +402,8 @@ public class CharacterEditorScreen implements Screen {
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getLevel(),
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getRaceType(),
 							MainMenu.characterInventory.getChatacterPack().get(getButton()).getAllAttributes(),
-							MainMenu.characterInventory.getChatacterPack().get(getButton()).getBackpack());
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getBackpack(),
+							MainMenu.characterInventory.getChatacterPack().get(getButton()).getEquipment());
 					initialEditorItem();
 					MainMenu.characterInventory.getChatacterPack().removeIndex(getButton());
 					MainMenu.characterInventory.saveToFile();

@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import Items.ItemInventory;
 import Character.CharacterInventory;
+import Map.MapInventory;
 
 public class MainMenu implements Screen{
 
@@ -30,6 +31,7 @@ public class MainMenu implements Screen{
     public static BitmapFont font;
     public static ItemInventory itemInventory;
     public static CharacterInventory characterInventory;
+    public static MapInventory mapInventory;
     TextureAtlas buttonAtlas;
     private Texture backgroundTexture;
     public static TextButton.TextButtonStyle buttonStyle;
@@ -62,6 +64,13 @@ public class MainMenu implements Screen{
         characterInventory = new CharacterInventory();
         try {
             characterInventory.readFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mapInventory = new MapInventory();
+        try {
+            mapInventory.readFile();
         } catch (IOException e) {
             e.printStackTrace();
         }

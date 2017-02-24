@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 import Races.Race;
 
 public class CharacterInventory {
@@ -38,44 +40,33 @@ public class CharacterInventory {
     }
 
     public  void readFile() throws IOException {
-        File file = new File("characterInventory.txt");
+        File file = new File("characterInventory.json");
         file.createNewFile(); // if file already exists will do nothing
 
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line = reader.readLine();
-        while( line != null && line !="" ) {
-            String[] itemArray = line.split("\\|",-1);
-            String[] abilityArrTmp = itemArray[itemArray.length-1].split(",",-1);
-            int[] abilityArr = new int[abilityArrTmp.length];
-            for (int i = 0; i < abilityArrTmp.length; i++) {
-                try {
-                    abilityArr[i] = Integer.parseInt(abilityArrTmp[i]);
-                } catch (NumberFormatException nfe) {
-                    //NOTE: write something here if you need to recover from formatting errors
-                }
-            }
-            addToInventory(new Character(itemArray[0], Integer.parseInt(itemArray[1]), Race.RaceType.valueOf(itemArray[2]), abilityArr));
-            line = reader.readLine();
+        Scanner scanner = new Scanner(file);
+        Json json = new Json();
+        String context;
+        Character character;
+        while (scanner.hasNext()){
+            context = scanner.nextLine();
+            character = json.fromJson(Character.class, context);
+            addToInventory(character);
         }
-        reader.close();
+        scanner.close();
+
     }
 
     public void saveToFile(){
-//        FileHandle file = Gdx.files.local("characterInventory.txt");
-//        file.write(false);
-//        for (Character i : this.chatacterPack){
-//            String str  = i.getName()  +"|" +  i.getLevel() +"|" + i.getRaceType().toString() + "|"
-//                            +i.getStrength() + "," + i.getDexterity() + "," + i.getConstitution() + ","
-//                            +i.getWisdom() + "," +i.getIntelligence() + ","+i.getCharisma() + ","
-//                            +i.getHitPoints() + "," +i.getArmorClass() + "," +i.getAttackBonus() + "," +i.getDamageBonus() + "\r\n";
-//            file.writeString(str,true);
-//        }
-    	
-    	Json json = new Json();
-    	String text = json.toJson(characterPack.first());
-    	System.out.println(text);
-    	Character charact1 = json.fromJson(Character.class, text);
-    	System.out.println(charact1.toString());
+
+        FileHandle file = Gdx.files.local("characterInventory.json");
+        file.write(false);
+        Json json = new Json();
+        String context;
+        for (Character i : this.characterPack){
+            context = json.toJson(i) + System.getProperty("line.separator");
+            file.writeString(context,true);
+        }
+
     }
 
 }

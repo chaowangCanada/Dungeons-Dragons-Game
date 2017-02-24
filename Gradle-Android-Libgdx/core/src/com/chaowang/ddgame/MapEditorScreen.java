@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -28,6 +29,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import Items.Item;
 import Character.Character;
 import Map.Map;
+import util.MazeSolver;
 
 public class MapEditorScreen implements Screen{
 
@@ -101,7 +103,7 @@ public class MapEditorScreen implements Screen{
 		confirmButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (//sizeField.getText().matches("^[2-9]$") &&
+				if (sizeField.getText().matches("^[1-9]$|^0[1-9]$|^1[0-1]$") &&
 						levelField.getText().matches("^[1-9]$") &&
 						( ! nameField.getText().equals(""))) {
 					mapMatrix = new ImageButton[Integer.parseInt(sizeField.getText()) * Integer.parseInt(sizeField.getText())];
@@ -140,11 +142,45 @@ public class MapEditorScreen implements Screen{
 		saveButton.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (sizeField.getText().matches("^[1-9]$")) {
-
+				int entryCount = map.validateEntryDoor();
+				int exitCount = map.validateExitDoor();
+				if (Integer.parseInt(sizeField.getText()) == map.getSize() && entryCount > 0 && exitCount > 0 ) {
+					if(entryCount == 1 && exitCount == 1){
+						MazeSolver solver = new MazeSolver();
+						if(solver.solveMaze(map.getLocationMatrix())){
+							map.addWall();
+							MainMenu.mapInventory.addToInventory(map);
+							MainMenu.mapInventory.saveToFile();
+							sizeField.setText("");
+							sizeField.setDisabled(false);
+							levelField.setText("");
+							levelField.setDisabled(false);
+							nameField.setText("");
+							nameField.setDisabled(false);
+							confirmButton.setTouchable(Touchable.enabled);
+							mapTable.clearChildren();
+						}
+						else{
+							new Dialog("Error", MainMenu.skin, "dialog") {
+							}.text("No path to exit").button("OK", true).key(Keys.ENTER, true)
+									.show(stage);
+						}
+					}
+					else{
+						new Dialog("Error", MainMenu.skin, "dialog") {
+						}.text("Map entry door exit door more than 1").button("OK", true).key(Keys.ENTER, true)
+								.show(stage);
+					}
+				}
+				else{
+					new Dialog("Error", MainMenu.skin, "dialog") {
+					}.text("Map does not have entry door or exit door").button("OK", true).key(Keys.ENTER, true)
+							.show(stage);
 				}
 				return true;
 			}
+
+
 		});
 		stage.addActor(saveButton);
 	}

@@ -7,6 +7,7 @@ import com.chaowang.ddgame.PublicParameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import Classes.Class.ClassType;
 import Items.*;
@@ -75,9 +76,10 @@ public class Character implements Json.Serializable{
 
     }
 
-    public Character(String name, int level, RaceType raceType, int[] abilityArr, ArrayList<Item> backpack) {
+    public Character(String name, int level, RaceType raceType, int[] abilityArr, ArrayList<Item> backpack, HashMap<Item.ItemType,Item> equipment) {
         this(name,level,raceType,abilityArr);
         this.backpack = backpack;
+		this.equipment = equipment;
     }
 
         private void updateTexture(RaceType raceType) {
@@ -376,8 +378,8 @@ public class Character implements Json.Serializable{
 		json.writeValue("hitPoints", hitPoints);
 		json.writeValue("armorClass", armorClass);
 		json.writeValue("isFriendly", isFriendly);
-		json.writeValue("equipment", equipment);
-		json.writeValue("backPack", backpack);
+		json.writeValue("equipment", equipment, HashMap.class, Item.class);
+		json.writeValue("backPack", backpack, ArrayList.class, Item.class);
 
 	}
 
@@ -385,9 +387,44 @@ public class Character implements Json.Serializable{
 	public void read(Json json, JsonValue jsonData) {
 		classType = ClassType.valueOf(jsonData.child.asString());
 		raceType = RaceType.valueOf(jsonData.child.next.asString());
+		updateTexture(raceType);
 		name = jsonData.child.next.next.asString();
 		level = jsonData.child.next.next.next.asInt();
 		setAbilities(jsonData.child.next.next.next.next.child.asIntArray());
+		attackBonus = jsonData.child.next.next.next.next.next.asInt();
+		damageBonus = jsonData.child.next.next.next.next.next.next.asInt();
+		hitPoints = jsonData.child.next.next.next.next.next.next.next.asInt();
+		armorClass = jsonData.child.next.next.next.next.next.next.next.next.asInt();
+		isFriendly = jsonData.child.next.next.next.next.next.next.next.next.next.asBoolean();
+		JsonValue equipmentPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next;
+		if(equipmentPointer != null){
+			Iterator<JsonValue> dataIterator = equipmentPointer.iterator();
+			Item item;
+			JsonValue dataValue;
+			String context;
+			while(dataIterator.hasNext()){
+				dataValue= dataIterator.next();
+				context = dataValue.toString();
+				context = context.substring(context.indexOf("{")-1);
+				item = json.fromJson(Item.class, context);
+				equipment.put(Item.ItemType.valueOf(dataValue.name) ,item);
+			}
+		}
+
+		JsonValue backPackPointer = jsonData.child.next.next.next.next.next.next.next.next.next.next.next;
+		if(backPackPointer != null){
+			Iterator<JsonValue> dataIterator = backPackPointer.iterator();
+			Item item;
+			JsonValue dataValue;
+			String context;
+			while(dataIterator.hasNext()){
+				dataValue= dataIterator.next();
+				context = dataValue.toString();
+				item = json.fromJson(Item.class, context);
+				backpack.add(item);
+			}
+		}
+
 	}
 
 

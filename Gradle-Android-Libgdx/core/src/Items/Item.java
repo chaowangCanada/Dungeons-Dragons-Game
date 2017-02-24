@@ -3,9 +3,14 @@ package Items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.chaowang.ddgame.PublicParameter;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Json.Serializable{
+
 
     public enum ItemType {
         HELMET(0, new EnchantedAbility[]{EnchantedAbility.INTELLIGENCE, EnchantedAbility.ARMORCLASS, EnchantedAbility.WISDOM}),
@@ -186,6 +191,26 @@ public class Item {
             abilityPointer = 0;
             return true;
         }
+    }
+
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("ItemType", itemType);
+        json.writeValue("Name", name);
+        json.writeValue("Level", level);
+        json.writeValue("enchantedAbility", enchantedAbility);
+        json.writeValue("abiltyPointer", abilityPointer);
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        itemType = ItemType.valueOf(jsonData.child.asString());
+        updateTexture(itemType);
+        name = jsonData.child.next.asString();
+        level = jsonData.child.next.next.asInt();
+        enchantedAbility = EnchantedAbility.valueOf(jsonData.child.next.next.next.asString());
+        abilityPointer = jsonData.child.next.next.next.next.asInt();
     }
 
 }

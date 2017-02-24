@@ -6,13 +6,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.chaowang.ddgame.PublicParameter;
 
-public class Wall {
+import Items.Item;
+
+public class Wall implements Json.Serializable{
 
     Vector2 position, size;
     Texture wall;
     Rectangle bounds;
+
+    public  Wall (){
+        this(new Vector2(0,0));
+    }
 
     public Wall(Vector2 position, Vector2 size){
         this.position = position;
@@ -59,4 +67,17 @@ public class Wall {
         this.bounds = bounds;
     }
 
+    @Override
+    public void write(Json json) {
+        json.writeValue("position", position, Vector2.class);
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        String positionStr = jsonData.child.toString();
+        positionStr = positionStr.substring(positionStr.indexOf("{")-1);
+        position = json.fromJson(Vector2.class, positionStr);
+        bounds.setX(position.x);
+        bounds.setY(position.y);
+    }
 }

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ItemInventory {
     private Array<Item> itemPack;
@@ -39,29 +40,33 @@ public class ItemInventory {
     public void addToInventory(Item item){
         itemPack.add(item);
     }
+
     public  void readFile() throws IOException {
-        File file = new File("itemInventory.txt");
+        File file = new File("itemInventory.json");
         file.createNewFile(); // if file already exists will do nothing
 
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line = reader.readLine();
-        while( line != null && line !="" ) {
-            String[] itemArray = line.split("\\|",-1);
-            addToInventory(new Item(Item.ItemType.valueOf(itemArray[0]), itemArray[1], Integer.parseInt(itemArray[2]), EnchantedAbility.valueOf(itemArray[3])));
-            line = reader.readLine();
+        Scanner scanner = new Scanner(file);
+        Json json = new Json();
+        String context;
+        Item item;
+        while (scanner.hasNext()){
+            context = scanner.nextLine();
+            item = json.fromJson(Item.class, context);
+            addToInventory(item);
         }
-
+        scanner.close();
     }
 
     public void saveToFile(){
-//        FileHandle file = Gdx.files.local("itemInventory.txt");
-//        file.write(false);
-//        for (Item i : this.itemPack){
-//            String str  = i.getItemType().toString() +"|" + i.getName() +"|" +  i.getLevel() +"|" + i.getEnchantedAbility().toString() + "\r\n";
-//            file.writeString(str,true);
-//        }
-    	Json json = new Json();
-    	System.out.println(json.prettyPrint(this));
+        FileHandle file = Gdx.files.local("itemInventory.json");
+        file.write(false);
+        Json json = new Json();
+        String context;
+        for (Item i : this.itemPack){
+            context = json.toJson(i) + System.getProperty("line.separator");
+            file.writeString(context,true);
+        }
+
     }
 
 }

@@ -3,11 +3,13 @@ package Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 
 public class MapInventory {
@@ -36,11 +38,32 @@ public class MapInventory {
     }
 
     public  void readFile() throws IOException {
+        File file = new File("mapInventory.json");
+        file.createNewFile(); // if file already exists will do nothing
+
+        Scanner scanner = new Scanner(file);
+        Json json = new Json();
+        String context;
+        Map map;
+        while (scanner.hasNext()){
+            context = scanner.nextLine();
+            map = json.fromJson(Map.class, context);
+            addToInventory(map);
+        }
+        scanner.close();
 
     }
 
     public void saveToFile(){
 
+        FileHandle file = Gdx.files.local("mapInventory.json");
+        file.write(false);
+        Json json = new Json();
+        String context;
+        for (Map i : this.mapPack){
+            context = json.toJson(i) + System.getProperty("line.separator");
+            file.writeString(context,true);
+        }
     }
 
 }

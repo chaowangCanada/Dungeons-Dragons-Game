@@ -5,12 +5,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.chaowang.ddgame.PublicParameter;
 
 public class Door {
 
     Vector2 position, size;
     Rectangle bounds;
+
+    public  Door (){
+        this(new Vector2(0,0));
+    }
 
     public Door(Vector2 position, Vector2 size){
         this.position = position;
@@ -50,5 +56,6 @@ public class Door {
     public void setBounds(Rectangle bounds) {
         this.bounds = bounds;
     }
+
 
 }

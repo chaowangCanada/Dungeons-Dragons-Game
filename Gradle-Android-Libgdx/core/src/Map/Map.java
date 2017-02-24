@@ -1,16 +1,19 @@
 package Map;
 
-
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.steer.behaviors.Face;
 import com.chaowang.ddgame.PublicParameter;
-
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import Items.Item;
 import Character.Character;
 
-public class Map {
+public class Map implements Json.Serializable{
 
     private int level = 1;
     private int size;
@@ -165,5 +168,121 @@ public class Map {
 
     public int getSize() {
         return size;
+    }
+
+    public int validateEntryDoor() {
+        int x = 0, y = 0, count = 0;
+        for (int i = 0 ; i< locationMatrix.length; i ++){
+            for (int j = 0 ; j < locationMatrix[0].length; j++ ){
+                if(locationMatrix[i][j] == 2 ){
+                    count ++;
+                    x = j; y = i;
+                }
+            }
+        }
+        if (count == 1){
+            entryDoor = new EntryDoor(new Vector2(x * PublicParameter.mapPixelSize, y * PublicParameter.mapPixelSize));
+        }
+        return  count;
+    }
+
+    public int validateExitDoor() {
+        int x = 0, y = 0, count = 0;
+        for (int i = 0 ; i< locationMatrix.length; i ++){
+            for (int j = 0 ; j < locationMatrix[0].length; j++ ){
+                if(locationMatrix[i][j] == 3 ){
+                    count ++;
+                    x = j; y = i;
+                }
+            }
+        }
+        if(count == 1){
+            exitDoor = new ExitDoor(new Vector2( x * PublicParameter.mapPixelSize, y * PublicParameter.mapPixelSize));
+        }
+        return count;
+    }
+
+    public void addWall(){
+        for (int i=0; i< locationMatrix.length ; i++){
+            for (int j = 0; j < locationMatrix[0].length; j++){
+                if(locationMatrix[i][j] == 1 ){
+                    wallLocationList.add(new Wall(new Vector2( j * PublicParameter.mapPixelSize, i* PublicParameter.mapPixelSize)));
+                }
+            }
+        }
+    }
+
+    public Vector2 getDistanceOfEntryExit(){
+        return new Vector2( Math.abs(entryDoor.getPosition().x - exitDoor.getPosition().x), Math.abs(entryDoor.getPosition().y - exitDoor.getPosition().y));
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("Name", name);
+        json.writeValue("Level", level);
+        json.writeValue("Size", size);
+        json.writeValue("EntryDoor", entryDoor, EntryDoor.class);
+        json.writeValue("ExitDoor", exitDoor, ExitDoor.class);
+        json.writeValue("LocationMatrix", locationMatrix);
+        json.writeValue("wallLocationList", wallLocationList, ArrayList.class, Wall.class);
+        json.writeValue("itemLocationList", itemLocationList, HashMap.class, Item.class);
+        json.writeValue("friendLocationList", friendLocationList, HashMap.class, Character.class);
+        json.writeValue("enemyLocationList", enemyLocationList, HashMap.class, Character.class);
+
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        String context;
+        name = jsonData.child.asString();
+        level = jsonData.child.next.asInt();
+        size = jsonData.child.next.next.asInt();
+        context = jsonData.child.next.next.next.toString();
+        context = context.substring(context.indexOf("{")-1);
+        entryDoor = json.fromJson(EntryDoor.class, context);
+        context = jsonData.child.next.next.next.next.toString();
+        context = context.substring(context.indexOf("{")-1);
+        exitDoor = json.fromJson(ExitDoor.class, context);
+
+        Iterator<JsonValue> dataIterator;
+        JsonValue pointer = jsonData.child.next.next.next.next.next;
+        if(pointer != null) {
+            dataIterator = pointer.iterator();
+            locationMatrix = new int[size][size];
+            for( int i = 0 ; i < size; i++){
+                locationMatrix[i] = dataIterator.next().asIntArray();
+            }
+        }
+
+        pointer = jsonData.child.next.next.next.next.next.next;
+        if(pointer != null){
+            dataIterator = pointer.iterator();
+            Wall wall;
+            while(dataIterator.hasNext()){
+                context = dataIterator.next().toString();
+                wall = json.fromJson(Wall.class, context);
+                wallLocationList.add(wall);
+            }
+        }
+
+        Vector2 location;
+        pointer = jsonData.child.next.next.next.next.next.next.next;
+        if(pointer != null){
+            dataIterator = pointer.iterator();
+            Item item;
+            JsonValue dataValue;
+            while(dataIterator.hasNext()){
+                dataValue= dataIterator.next();
+                context = dataValue.name();
+                location = new Vector2(Float.parseFloat(context.substring(context.indexOf("(")+1,dataValue.name.indexOf(",")))
+                        , Float.parseFloat(context.substring(context.indexOf(",")+1,dataValue.name.indexOf(")"))));
+                context = dataValue.toString();
+                context = context.substring(context.indexOf("{")-1);
+                item = json.fromJson(Item.class, context);
+                itemLocationList.put(location,item);
+            }
+        }
+
+
     }
 }

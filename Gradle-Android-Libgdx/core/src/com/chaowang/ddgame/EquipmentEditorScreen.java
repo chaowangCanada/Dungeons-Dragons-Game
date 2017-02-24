@@ -189,7 +189,7 @@ public class EquipmentEditorScreen implements Screen{
 
         stage.draw();
 
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
         batch.end();
     }
 
@@ -262,13 +262,15 @@ public class EquipmentEditorScreen implements Screen{
             equipmentMatrix[i].addListener(new ClickListener(i) {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    character.getBackpack().add(character.removeEquipment(Item.ItemType.getItemType(getButton())));
-                    equipmentTable.clearChildren();
-                    buildEquipmentMatrix();
-                    addEquipmentMatrixListener();
-                    backpackTable.clearChildren();
-                    buildBackpackMatrix();
-                    addBackpackMatrixListener();
+                    if(character.getEquipment().containsKey(Item.ItemType.getItemType(getButton()))){
+                        character.getBackpack().add(character.removeEquipment(Item.ItemType.getItemType(getButton())));
+                        equipmentTable.clearChildren();
+                        buildEquipmentMatrix();
+                        addEquipmentMatrixListener();
+                        backpackTable.clearChildren();
+                        buildBackpackMatrix();
+                        addBackpackMatrixListener();
+                    }
                     return true;
                 }
 
